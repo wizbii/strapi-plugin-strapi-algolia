@@ -275,11 +275,11 @@ describe('strapi-algolia plugin', () => {
                 event?.result?.id ?? event?.params?.where?.id,
             }),
           }),
-          entityService: {
+          query: jest.fn().mockReturnValue({
             findOne: jest
               .fn()
               .mockReturnValue(Promise.resolve(fakeArticle)),
-          },
+          }),
         } as any;
       });
 
@@ -291,7 +291,7 @@ describe('strapi-algolia plugin', () => {
                 uid: 'api::contentType.contentType',
               },
             } as any,
-            '*'
+            true
           )
         ).rejects.toThrow('No entry id found in event.');
       });
@@ -299,11 +299,11 @@ describe('strapi-algolia plugin', () => {
       test('throw error when object not found', async () => {
         strapi = {
           ...strapi,
-          entityService: {
+          query: jest.fn().mockReturnValue({
             findOne: jest
               .fn()
               .mockReturnValue(Promise.resolve(undefined)),
-          },
+          }),
         } as any;
 
         expect(
@@ -316,7 +316,7 @@ describe('strapi-algolia plugin', () => {
                 uid: 'api::contentType.contentType',
               },
             } as any,
-            '*'
+            true
           )
         ).rejects.toThrow(
           'No entry found for api::contentType.contentType with ID id'
@@ -335,15 +335,17 @@ describe('strapi-algolia plugin', () => {
               uid: 'api::contentType.contentType',
             },
           } as any,
-          '*'
+          true
         );
 
         expect(obj).toEqual(fakeArticle);
-        expect(strapi.entityService.findOne).toHaveBeenCalledWith(
-          'api::contentType.contentType',
-          'id',
-          { populate: '*' }
+        expect(strapi.query).toHaveBeenCalledWith(
+          'api::contentType.contentType'
         );
+        expect(strapi.query().findOne).toHaveBeenCalledWith({
+          populate: true,
+          where: { id: 'id' },
+        });
       });
 
       test('return a strapi object found with params', async () => {
@@ -360,77 +362,17 @@ describe('strapi-algolia plugin', () => {
               uid: 'api::contentType.contentType',
             },
           } as any,
-          '*'
+          true
         );
 
         expect(obj).toEqual(fakeArticle);
-        expect(strapi.entityService.findOne).toHaveBeenCalledWith(
-          'api::contentType.contentType',
-          'id',
-          { populate: '*' }
+        expect(strapi.query).toHaveBeenCalledWith(
+          'api::contentType.contentType'
         );
-      });
-    });
-
-    describe('getFakeEvents utils', () => {
-      const strapi: any = {};
-
-      test('return fake events', () => {
-        expect(
-          strapiServiceUtils({ strapi }).getFakeEvents(
-            {
-              uid: 'api::contentType.contentType',
-              singularName: 'article',
-            },
-            [{ id: 'id' }, { id: 'id2' }, { id: 'id3' }]
-          )
-        ).toEqual([
-          {
-            action: 'afterCreate',
-            model: {
-              uid: 'api::contentType.contentType',
-              singularName: 'article',
-            },
-            params: {
-              where: {
-                id: 'id',
-              },
-            },
-            result: {
-              id: 'id',
-            },
-          },
-          {
-            action: 'afterCreate',
-            model: {
-              uid: 'api::contentType.contentType',
-              singularName: 'article',
-            },
-            params: {
-              where: {
-                id: 'id2',
-              },
-            },
-            result: {
-              id: 'id2',
-            },
-          },
-          {
-            action: 'afterCreate',
-            model: {
-              uid: 'api::contentType.contentType',
-              singularName: 'article',
-            },
-            params: {
-              where: {
-                id: 'id3',
-              },
-            },
-            result: {
-              id: 'id3',
-            },
-          },
-        ]);
+        expect(strapi.query().findOne).toHaveBeenCalledWith({
+          populate: true,
+          where: { id: 'id' },
+        });
       });
     });
   });

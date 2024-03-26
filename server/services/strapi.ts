@@ -1,4 +1,4 @@
-import { Common, Entity, Strapi } from '@strapi/strapi';
+import { Common, Strapi } from '@strapi/strapi';
 import { SearchIndex } from 'algoliasearch';
 import { HookEvent } from '../../utils/event';
 
@@ -16,11 +16,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       throw new Error(`No entry id found in event.`);
     }
 
-    const strapiObject = await strapi.entityService?.findOne(
-      modelUid,
-      entryId,
-      { populate }
-    );
+    const strapiObject = await strapi
+      .query(modelUid)
+      ?.findOne({ populate, where: { id: entryId } });
 
     if (!strapiObject) {
       throw new Error(
@@ -143,23 +141,4 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       );
     }
   },
-  getFakeEvents: (
-    model: { uid: string; singularName: string },
-    articles: { id: Entity.ID }[]
-  ) =>
-    articles.map((article) => ({
-      action: 'afterCreate',
-      model: {
-        uid: model.uid,
-        singularName: model.singularName,
-      },
-      params: {
-        where: {
-          id: article.id,
-        },
-      },
-      result: {
-        id: article.id,
-      },
-    })),
 });
