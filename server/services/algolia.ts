@@ -1,6 +1,7 @@
 import { Strapi } from '@strapi/strapi';
 import { SearchIndex } from 'algoliasearch';
 import { HookEvent } from '../../utils/event';
+import algoliasearch from 'algoliasearch';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default ({ strapi }: { strapi: Strapi }) => ({
@@ -16,12 +17,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
     return chunks;
   },
-  getAlgoliaClient: async (applicationId: string, apiKey: string) => {
-    const algoliasearch = await import('algoliasearch').then(
-      (a) => a.default
-    );
-    const client = algoliasearch(applicationId, apiKey);
-    return client;
+  getAlgoliaClient: (applicationId: string, apiKey: string) => {
+    return algoliasearch(applicationId, apiKey);
   },
   createOrDeleteObjects: async (
     objectsToSave: any[],
