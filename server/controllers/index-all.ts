@@ -28,7 +28,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     const algoliaService = strapiAlgolia.service('algolia');
     const strapiService = strapiAlgolia.service('strapi');
 
-    const client = algoliaService.getAlgoliaClient(
+    const client = await algoliaService.getAlgoliaClient(
       applicationId,
       apiKey
     );
