@@ -1,0 +1,9 @@
+{
+  "extends": "@strapi/typescript-utils/tsconfigs/server",
+  "compilerOptions": {
+    "rootDir": ".",
+    "allowJs": true
+  },
+  "exclude": ["node_modules/", "build/", "dist/"],
+  "include": ["./", "src/**/*.json"]
+}
