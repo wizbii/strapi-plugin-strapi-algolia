@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-strapi-algolia",
-  "version": "1.2.0",
+  "version": "1.3.0-3",
   "description": "Index articles configured to Algolia",
   "keywords": [
     "strapi",
@@ -44,7 +44,7 @@
     "@strapi/icons": "^1.16.0",
     "@strapi/strapi": "^4.21.0",
     "@strapi/utils": "^4.21.0",
-    "algoliasearch": "^4.22.1",
+    "algoliasearch": "4.22.1",
     "prop-types": "^15.8.1"
   },
   "devDependencies": {
