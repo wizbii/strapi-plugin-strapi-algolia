@@ -42,6 +42,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     const objectsToSave: any[] = [];
     const objectsIdsToDelete: string[] = [];
     const events = _events as HookEvent[];
+    const indexExist = await algoliaIndex.exists();
 
     for (const event of events) {
       try {
@@ -54,7 +55,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         );
 
         if (strapiObject.publishedAt === null) {
-          const indexExist = await algoliaIndex.exists();
           if (indexExist) {
             objectsIdsToDelete.push(entryId);
           }
