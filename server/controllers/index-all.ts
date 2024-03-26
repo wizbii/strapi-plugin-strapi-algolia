@@ -60,20 +60,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     const algoliaIndex = client.initIndex(indexName);
 
     const articles = await strapi.entityService?.findMany(
-      name as any
+      name as any,
+      { populate }
     );
 
-    const events = strapiService.getFakeEvents(
-      {
-        uid: name,
-        singularName: 'article',
-      },
-      (articles ?? []).filter((a: any) => !!a)
-    );
-
-    await strapiService.afterUpdateAndCreate(
-      events,
-      populate,
+    await strapiService.afterUpdateAndCreateAlreadyPopulate(
+      articles,
       idPrefix,
       algoliaIndex
     );
