@@ -79,6 +79,48 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       algoliaIndex
     );
   },
+  afterUpdateAndCreateAlreadyPopulate: async (
+    articles: any[],
+    idPrefix: string,
+    algoliaIndex: SearchIndex
+  ) => {
+    const strapiAlgolia = strapi.plugin('strapi-algolia');
+    const algoliaService = strapiAlgolia.service('algolia');
+
+    const objectsToSave: any[] = [];
+    const objectsIdsToDelete: string[] = [];
+    const indexExist = await algoliaIndex.exists();
+
+    for (const article of articles) {
+      try {
+        const entryId = article.id;
+        const entryIdWithPrefix = `${idPrefix}${entryId}`;
+
+        if (article.publishedAt === null) {
+          if (indexExist) {
+            objectsIdsToDelete.push(entryIdWithPrefix);
+          }
+        } else if (article.publishedAt !== null) {
+          objectsToSave.push({
+            objectID: entryIdWithPrefix,
+            ...article,
+          });
+        }
+      } catch (error) {
+        console.error(
+          `Error while updating Algolia index: ${JSON.stringify(
+            error
+          )}`
+        );
+      }
+    }
+
+    await algoliaService.createOrDeleteObjects(
+      objectsToSave,
+      objectsIdsToDelete,
+      algoliaIndex
+    );
+  },
   afterDeleteOneOrMany: async (
     _event: any,
     idPrefix: string,
