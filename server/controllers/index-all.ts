@@ -16,6 +16,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       contentTypes,
       applicationId,
       apiKey,
+      locales: globalLocale = ['fr', 'en'],
     } = strapi.config.get(
       'plugin.strapi-algolia'
     ) as StrapiAlgoliaConfig;
@@ -54,14 +55,21 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       index,
       idPrefix = '',
       populate = '*',
+      locales = globalLocale,
     } = contentType;
 
     const indexName = `${indexPrefix}${index ?? name}`;
     const algoliaIndex = client.initIndex(indexName);
 
+    const localeFilter = locales ?? ['fr', 'en'];
     const articles = await strapi.entityService?.findMany(
       name as any,
-      { populate }
+      {
+        populate,
+        filters: {
+          locale: localeFilter,
+        },
+      }
     );
 
     await strapiService.afterUpdateAndCreateAlreadyPopulate(
