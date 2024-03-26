@@ -71,13 +71,13 @@ export default ({ strapi }: { strapi: Strapi }) => ({
           )}`
         );
       }
-
-      await algoliaService.createOrDeleteObjects(
-        objectsToSave,
-        objectsIdsToDelete,
-        algoliaIndex
-      );
     }
+
+    await algoliaService.createOrDeleteObjects(
+      objectsToSave,
+      objectsIdsToDelete,
+      algoliaIndex
+    );
   },
   afterDeleteOneOrMany: async (
     _event: any,
