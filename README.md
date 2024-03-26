@@ -73,13 +73,15 @@ export default ({ env }) => ({
 
 #### All configurations options
 
-| Property              | Description                       | Type                                                                  | Default value |
-| --------------------- | --------------------------------- | --------------------------------------------------------------------- | ------------- |
-| applicationId         | Algolia application ID (required) | string                                                                |               |
-| apiKey                | Algolia API Key (required)        | string                                                                |               |
-| indexPrefix           | Text                              | string                                                                |               |
-| contentTypes          | Text                              | Array<object>                                                         |               |
-| contentTypes.name     | Text (required)                   | string                                                                |               |
-| contentTypes.index    | Text                              | string                                                                |               |
-| contentTypes.idPrefix | Text                              | string                                                                |               |
-| contentTypes.populate | Text                              | [object](https://docs.strapi.io/dev-docs/api/entity-service/populate) | All fields    |
+| Property              | Description                                                                                                            | Type                                                                  | Default value                         |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------- |
+| applicationId         | Algolia application ID                                                                                                 | string **(required)**                                                 |                                       |
+| apiKey                | Algolia API Key                                                                                                        | string **(required)**                                                 |                                       |
+| indexPrefix           | Prefix for the Algolia index                                                                                           | string                                                                | `` `${strapi.config.environment}_` `` |
+| locales               | All the locales to index globally (overridden by content-type locales configuration for content-type)                  | Array\<string\>                                                       | `['fr', 'en']`                        |
+| contentTypes          | Array of content types needed to be indexed                                                                            | Array\<object\> **(required)**                                        |                                       |
+| contentTypes.name     | NAme of the content type                                                                                               | string **(required)**                                                 |                                       |
+| contentTypes.index    | Algolia index for the current content type                                                                             | string                                                                |                                       |
+| contentTypes.idPrefix | Prefix for the item id                                                                                                 | string                                                                |                                       |
+| contentTypes.populate | Which fields needed to be indexed on Algolia, by default all the properties are indexed                                | [object](https://docs.strapi.io/dev-docs/api/entity-service/populate) | `'*'` = All fields                    |
+| contentTypes.locales  | All the locales to index for the current content type (override global locales configuration for current content-type) | Array\<string\>                                                       |                                       |
