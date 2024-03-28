@@ -40,15 +40,15 @@
   },
   "dependencies": {
     "@strapi/design-system": "^1.16.0",
-    "@strapi/helper-plugin": "^4.21.0",
+    "@strapi/helper-plugin": "^4.21.1",
     "@strapi/icons": "^1.16.0",
-    "@strapi/strapi": "^4.21.0",
-    "@strapi/utils": "^4.21.0",
+    "@strapi/strapi": "^4.21.1",
+    "@strapi/utils": "^4.21.1",
     "algoliasearch": "4.22.1",
     "prop-types": "^15.8.1"
   },
   "devDependencies": {
-    "@strapi/typescript-utils": "^4.21.0",
+    "@strapi/typescript-utils": "^4.21.1",
     "@types/jest": "^29.5.12",
     "@types/react": "^17.0.53",
     "@types/react-dom": "^18.0.28",
@@ -68,6 +68,7 @@
     "typescript": "5.4.3"
   },
   "peerDependencies": {
+    "@strapi/strapi": "^4.21.1",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-router-dom": "^5.2.0",
