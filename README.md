@@ -83,3 +83,35 @@ export default ({ env }) => ({
 | contentTypes.index    | Algolia index for the current content type                                              | string                                                                |                                       |
 | contentTypes.idPrefix | Prefix for the item id                                                                  | string                                                                |                                       |
 | contentTypes.populate | Which fields needed to be indexed on Algolia, by default all the properties are indexed | [object](https://docs.strapi.io/dev-docs/api/query-engine/populating) | `true` = All fields                   |
+
+### 4. Endpoints
+
+#### Index all the content of a content-type
+
+Call the following endpoint `/strapi-algolia/index-all-articles` with POST method.
+
+The body must be like this:
+
+```json
+{
+  "name": "api::article.article"
+}
+```
+
+You must be admin and add an authorization bearer token in the header.
+
+```
+Authorization: Bearer YOUR_TOKEN
+```
+
+##### Example with curl:
+
+```bash
+curl --request POST \
+  --url https://YOUR_STRAPI_INSTANCE/strapi-algolia/index-all-articles \
+  --header 'Authorization: Bearer YOUR_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"name": "api::article.article"
+}'
+```
