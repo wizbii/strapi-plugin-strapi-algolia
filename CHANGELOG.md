@@ -1,5 +1,12 @@
 
 
+## [1.3.4](https://github.com/wizbii/strapi-algolia/compare/v1.3.3...v1.3.4) (2024-03-29)
+
+
+### Bug Fixes
+
+- [README] - fix badge
+
 ## [1.3.3](https://github.com/wizbii/strapi-algolia/compare/v1.3.2...v1.3.3) (2024-03-29)
 
 
