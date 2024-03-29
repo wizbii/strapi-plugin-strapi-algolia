@@ -118,3 +118,5 @@ types
 public/sitemap
 documentation
 .strapi
+
+CHANGELOG.md

@@ -6,7 +6,6 @@ A strapi plugin to sync your strapi content with Algolia.
 [![Npm package daily downloads](https://badgen.net/npm/dm/strapi-plugin-strapi-algolia)](https://npmjs.com/package/strapi-plugin-strapi-algolia)
 [![GitHub stars](https://badgen.net/github/stars/wizbii/strapi-plugin-strapi-algolia)](https://gitHub.com/wizbii/strapi-plugin-strapi-algolia)
 [![GitHub issues](https://img.shields.io/github/issues/wizbii/strapi-plugin-strapi-algolia.svg)](https://GitHub.com/wizbii/strapi-plugin-strapi-algolia/issues/)
-
 ![main workflow](https://github.com/wizbii/strapi-plugin-strapi-algolia/actions/workflows/main.yml/badge.svg)
 
 ## Getting started
@@ -86,7 +85,7 @@ export default ({ env }) => ({
 | apiKey                | Algolia API Key                                                                         | string **(required)**                                                 |                                       |
 | indexPrefix           | Prefix for the Algolia index                                                            | string                                                                | `` `${strapi.config.environment}_` `` |
 | contentTypes          | Array of content types needed to be indexed                                             | Array\<object\> **(required)**                                        |                                       |
-| contentTypes.name     | NAme of the content type                                                                | string **(required)**                                                 |                                       |
+| contentTypes.name     | Name of the content type                                                                | string **(required)**                                                 |                                       |
 | contentTypes.index    | Algolia index for the current content type                                              | string                                                                |                                       |
 | contentTypes.idPrefix | Prefix for the item id                                                                  | string                                                                |                                       |
 | contentTypes.populate | Which fields needed to be indexed on Algolia, by default all the properties are indexed | [object](https://docs.strapi.io/dev-docs/api/query-engine/populating) | `true` = All fields                   |
