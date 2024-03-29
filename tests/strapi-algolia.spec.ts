@@ -1,7 +1,7 @@
-import { validateConfig } from '../utils/validate';
-import strapiServiceUtils from '../server/services/strapi';
 import algoliaServiceUtils from '../server/services/algolia';
+import strapiServiceUtils from '../server/services/strapi';
 import { HookEvent } from '../utils/event';
+import { validateConfig } from '../utils/validate';
 
 describe('strapi-algolia plugin', () => {
   describe('validate utils', () => {
@@ -275,11 +275,11 @@ describe('strapi-algolia plugin', () => {
                 event?.result?.id ?? event?.params?.where?.id,
             }),
           }),
-          query: jest.fn().mockReturnValue({
+          entityService: {
             findOne: jest
               .fn()
               .mockReturnValue(Promise.resolve(fakeArticle)),
-          }),
+          },
         } as any;
       });
 
@@ -299,11 +299,11 @@ describe('strapi-algolia plugin', () => {
       test('throw error when object not found', async () => {
         strapi = {
           ...strapi,
-          query: jest.fn().mockReturnValue({
+          entityService: {
             findOne: jest
               .fn()
               .mockReturnValue(Promise.resolve(undefined)),
-          }),
+          },
         } as any;
 
         expect(
@@ -335,17 +335,17 @@ describe('strapi-algolia plugin', () => {
               uid: 'api::contentType.contentType',
             },
           } as any,
-          true
+          '*'
         );
 
         expect(obj).toEqual(fakeArticle);
-        expect(strapi.query).toHaveBeenCalledWith(
-          'api::contentType.contentType'
+        expect(strapi.entityService.findOne).toHaveBeenCalledWith(
+          'api::contentType.contentType',
+          'id',
+          {
+            populate: '*',
+          }
         );
-        expect(strapi.query().findOne).toHaveBeenCalledWith({
-          populate: true,
-          where: { id: 'id' },
-        });
       });
 
       test('return a strapi object found with params', async () => {
@@ -362,17 +362,17 @@ describe('strapi-algolia plugin', () => {
               uid: 'api::contentType.contentType',
             },
           } as any,
-          true
+          '*'
         );
 
         expect(obj).toEqual(fakeArticle);
-        expect(strapi.query).toHaveBeenCalledWith(
-          'api::contentType.contentType'
+        expect(strapi.entityService.findOne).toHaveBeenCalledWith(
+          'api::contentType.contentType',
+          'id',
+          {
+            populate: '*',
+          }
         );
-        expect(strapi.query().findOne).toHaveBeenCalledWith({
-          populate: true,
-          where: { id: 'id' },
-        });
       });
     });
   });

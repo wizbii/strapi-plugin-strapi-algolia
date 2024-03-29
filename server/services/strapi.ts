@@ -16,9 +16,11 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       throw new Error(`No entry id found in event.`);
     }
 
-    const strapiObject = await strapi
-      .query(modelUid)
-      ?.findOne({ populate, where: { id: entryId } });
+    const strapiObject = await strapi.entityService?.findOne(
+      modelUid,
+      entryId,
+      { populate }
+    );
 
     if (!strapiObject) {
       throw new Error(

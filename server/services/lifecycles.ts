@@ -30,7 +30,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         name,
         index,
         idPrefix = '',
-        populate = true,
+        populate = '*',
       } = contentType;
 
       if (strapi.contentTypes[name]) {

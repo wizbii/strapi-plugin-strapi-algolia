@@ -88,7 +88,7 @@ export default ({ env }) => ({
 | contentTypes.name     | Name of the content type                                                                | string **(required)**                                                 |                                       |
 | contentTypes.index    | Algolia index for the current content type                                              | string                                                                |                                       |
 | contentTypes.idPrefix | Prefix for the item id                                                                  | string                                                                |                                       |
-| contentTypes.populate | Which fields needed to be indexed on Algolia, by default all the properties are indexed | [object](https://docs.strapi.io/dev-docs/api/query-engine/populating) | `true` = All fields                   |
+| contentTypes.populate | Which fields needed to be indexed on Algolia, by default all the properties are indexed | [object](https://docs.strapi.io/dev-docs/api/entity-service/populate) | `'*'` = All fields                    |
 
 ### 4. Endpoints
 

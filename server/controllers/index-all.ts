@@ -53,7 +53,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       name,
       index,
       idPrefix = '',
-      populate = true,
+      populate = '*',
     } = contentType;
 
     const indexName = `${indexPrefix}${index ?? name}`;
@@ -68,15 +68,14 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     const findManyOptions = localeFilter
       ? {
           ...findManyBaseOptions,
-          where: {
-            locale: localeFilter,
-          },
+          locale: localeFilter,
         }
       : { ...findManyBaseOptions };
 
-    const articles = await strapi
-      .query(name as any)
-      ?.findMany(findManyOptions);
+    const articles = await strapi.entityService?.findMany(
+      name as any,
+      findManyOptions
+    );
 
     await strapiService.afterUpdateAndCreateAlreadyPopulate(
       articles,
