@@ -46,7 +46,7 @@
     "@strapi/icons": "^1.16.0",
     "@strapi/strapi": "^4.21.1",
     "@strapi/utils": "^4.21.1",
-    "algoliasearch": "4.22.1",
+    "algoliasearch": "4.23.2",
     "prop-types": "^15.8.1"
   },
   "devDependencies": {
