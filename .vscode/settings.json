@@ -1,0 +1,43 @@
+{
+  // Ensure correct version of TypeScript is used
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  // Format on save for all files by default
+  "editor.formatOnSave": true,
+  "explorer.autoReveal": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "css.customData": [".vscode/tailwind.json"],
+  "files.eol": "\n",
+  // Disable built-in validators and formatters (let extensions do it)
+  "scss.validate": true,
+  "stylelint.enable": true,
+  "stylelint.validate": ["scss", "svelte"],
+  "stylelint.snippet": ["css", "postcss", "scss", "svelte"],
+  "typescript.format.enable": false,
+  "json.format.enable": false,
+  "files.insertFinalNewline": false,
+  "files.trimFinalNewlines": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "html.format.enable": true,
+  "html.format.wrapAttributes": "aligned-multiple",
+  "task.slowProviderWarning": ["gradle"],
+  "workbench.colorCustomizations": {
+    "tab.unfocusedActiveBorder": "#fff0"
+  },
+  "explorer.compactFolders": false,
+  "liveshare.allowGuestDebugControl": true,
+  "liveshare.allowGuestTaskControl": true,
+  "liveshare.languages.allowGuestCommandControl": true,
+  "liveshare.openSharedServers": false,
+  "liveshare.publishWorkspaceInfo": true
+}
