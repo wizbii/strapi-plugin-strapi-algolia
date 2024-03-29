@@ -38,7 +38,7 @@
     "test": "jest --runInBand --forceExit --detectOpenHandles",
     "test:ci": "npm run test --ci",
     "prepare": "husky",
-    "release": "release-it --only-version"
+    "release": "release-it --only-version --dry-run"
   },
   "dependencies": {
     "@strapi/design-system": "^1.16.0",
@@ -51,7 +51,6 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^19.1.0",
-    "@release-it/bumper": "^6.0.1",
     "@release-it/conventional-changelog": "^8.0.1",
     "@strapi/typescript-utils": "^4.21.1",
     "@types/jest": "^29.5.12",

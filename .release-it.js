@@ -10,9 +10,6 @@ module.exports = {
     tagName: 'v${version}',
   },
   plugins: {
-    '@release-it/bumper': {
-      out: 'package.json',
-    },
     '@release-it/conventional-changelog': {
       writerOpts: {
         commitPartial: commitTemplate,
