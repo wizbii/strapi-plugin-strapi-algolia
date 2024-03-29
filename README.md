@@ -2,6 +2,13 @@
 
 A strapi plugin to sync your strapi content with Algolia.
 
+[![Npm package version](https://badgen.net/npm/v/strapi-plugin-strapi-algolia)](https://npmjs.com/package/strapi-plugin-strapi-algolia)
+[![Npm package daily downloads](https://badgen.net/npm/dm/strapi-plugin-strapi-algolia)](https://npmjs.com/package/strapi-plugin-strapi-algolia)
+[![GitHub stars](https://badgen.net/github/stars/wizbii/strapi-plugin-strapi-algolia)](https://gitHub.com/wizbii/strapi-plugin-strapi-algolia)
+[![GitHub issues](https://img.shields.io/github/issues/wizbii/strapi-plugin-strapi-algolia.svg)](https://GitHub.com/wizbii/strapi-plugin-strapi-algolia/issues/)
+
+![main workflow](https://github.com/wizbii/strapi-plugin-strapi-algolia/actions/workflows/main.yml/badge.svg)
+
 ## Getting started
 
 ### 1. Installation
