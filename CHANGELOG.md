@@ -1,5 +1,12 @@
 
 
+## [1.5.0-3](https://github.com/wizbii/strapi-algolia/compare/v1.5.0-2...v1.5.0-3) (2024-04-02)
+
+
+### Bug Fixes
+
+- [custom] - remove custom file to get typings- [indexAll] - fix the content types get- [permission] - add real plugin id
+
 ## [1.5.0-2](https://github.com/wizbii/strapi-algolia/compare/v1.5.0-1...v1.5.0-2) (2024-04-02)
 
 
