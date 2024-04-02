@@ -1,0 +1,10 @@
+{
+  "index": {
+    "confirm-modal-title": "Confirm indexing all items?",
+    "confirm-modal-body": "Are you sure you want to index all items this content type?",
+    "confirm-modal-confirm": "Index all items",
+    "delete-entry": "Index all items",
+    "success": "All items have been indexed",
+    "error": "Error indexing items"
+  }
+}
