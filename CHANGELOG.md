@@ -1,5 +1,12 @@
 
 
+## [1.5.0-0](https://github.com/wizbii/strapi-algolia/compare/v1.4.0...v1.5.0-0) (2024-04-02)
+
+
+### Features
+
+- [admin] - add all needed hooks- [admin] - add component that would be injected in the list view- [admin] - add Index All Button to trigger indexing- [admin] - add Initializer- [admin] - add needed base files- [admin] - add permission to get- [admin] - add plugin id file- [admin] - add translations- [server] - add endpoint to get configured content types- [server] - add permissions to index all
+
 ## [1.4.0](https://github.com/wizbii/strapi-algolia/compare/v1.3.4...v1.4.0) (2024-03-29)
 
 
