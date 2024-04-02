@@ -9,5 +9,13 @@ export default {
         policies: ['admin::isAuthenticatedAdmin'],
       },
     },
+    {
+      method: 'GET',
+      path: '/config/content-types',
+      handler: 'strapi-algolia-config.contentTypes',
+      config: {
+        policies: ['admin::isAuthenticatedAdmin'],
+      },
+    },
   ],
 };

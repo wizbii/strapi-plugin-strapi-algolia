@@ -1,0 +1,10 @@
+{
+  "index": {
+    "confirm-modal-title": "Confirmer l'indexation des articles ?",
+    "confirm-modal-body": "Êtes-vous sur de vouloir indexer tous les articles de ce type de contenu ?",
+    "confirm-modal-confirm": "Indexer tous les articles",
+    "delete-entry": "Indexer tous les articles",
+    "success": "Tous les articles ont été indexés avec succès",
+    "error": "Erreur à l'indexation des articles"
+  }
+}

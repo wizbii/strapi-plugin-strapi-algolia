@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-strapi-algolia",
-  "version": "1.4.0",
+  "version": "1.5.0-4",
   "description": "Index articles configured to Algolia",
   "keywords": [
     "strapi",
@@ -21,8 +21,10 @@
     }
   ],
   "files": [
-    "dist/admin/**/*.js",
-    "dist/admin/**/*.json",
+    "admin/**/*.ts",
+    "admin/**/*.js",
+    "admin/**/*.tsx",
+    "admin/**/*.json",
     "dist/server/**/*.js",
     "dist/utils/**/*.js",
     "strapi-admin.js",
