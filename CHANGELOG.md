@@ -1,5 +1,12 @@
 
 
+## [1.5.0](https://github.com/wizbii/strapi-algolia/compare/v1.5.0-4...v1.5.0) (2024-04-02)
+
+
+### Bug Fixes
+
+ - changelog formatting - update FR translations
+
 ## [1.5.0-4](https://github.com/wizbii/strapi-algolia/compare/v1.5.0-3...v1.5.0-4) (2024-04-02)
 
 
