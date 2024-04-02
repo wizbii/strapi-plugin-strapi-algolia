@@ -39,13 +39,13 @@ const IndexAllButton = ({ contentType }: { contentType: string }) => {
       // Show the loading state
       setIsModalConfirmButtonLoading(true);
 
-      await post(`/${pluginId}/index-all-articles`, {
-        method: 'POST',
-        signal,
-        body: {
-          name: contentType as any,
-        } as any,
-      });
+      await post(
+        `/${pluginId}/index-all-articles`,
+        {
+          name: contentType,
+        },
+        { signal }
+      );
 
       toggleNotification({
         type: 'success',
@@ -103,6 +103,7 @@ const IndexAllButton = ({ contentType }: { contentType: string }) => {
         })}
       </Button>
       <ConfirmDialog
+        variantRightButton="default"
         isConfirmButtonLoading={isModalConfirmButtonLoading}
         isOpen={showConfirmModal}
         onConfirm={handleConfirmDelete}
