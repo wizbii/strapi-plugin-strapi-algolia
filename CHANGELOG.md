@@ -1,5 +1,12 @@
 
 
+## [1.5.0-4](https://github.com/wizbii/strapi-algolia/compare/v1.5.0-3...v1.5.0-4) (2024-04-02)
+
+
+### Bug Fixes
+
+ - changelog formatting- [confirmModal] - use primary color on left modal btn
+
 ## [1.5.0-3](https://github.com/wizbii/strapi-algolia/compare/v1.5.0-2...v1.5.0-3) (2024-04-02)
 
 
