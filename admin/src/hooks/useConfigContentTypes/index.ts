@@ -39,7 +39,7 @@ const useConfigContentTypes = (shouldFetchData = true) => {
         type: Actions.GET_DATA,
       });
 
-      const { contentTypes } = await client.get(
+      const { data } = await client.get(
         `/${pluginId}/config/content-types`,
         {
           method: 'GET',
@@ -49,7 +49,7 @@ const useConfigContentTypes = (shouldFetchData = true) => {
 
       dispatch({
         type: Actions.GET_DATA_SUCCEEDED,
-        data: contentTypes,
+        data: data.contentTypes,
       });
     } catch (err: any) {
       const message =

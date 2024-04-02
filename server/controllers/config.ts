@@ -19,6 +19,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       return;
     }
 
-    ctx.body = { contentTypes };
+    ctx.body = {
+      contentTypes: contentTypes.map(
+        (contentType) => contentType.name
+      ),
+    };
   },
 });
