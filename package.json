@@ -21,8 +21,10 @@
     }
   ],
   "files": [
-    "dist/admin/**/*.js",
-    "dist/admin/**/*.json",
+    "admin/**/*.ts",
+    "admin/**/*.js",
+    "admin/**/*.tsx",
+    "admin/**/*.json",
     "dist/server/**/*.js",
     "dist/utils/**/*.js",
     "strapi-admin.js",
