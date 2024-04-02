@@ -1,7 +1,9 @@
+import pluginId from './pluginId';
+
 const pluginPermissions = {
   index: [
     {
-      action: `plugin::wizbii-feature.index.index-all`,
+      action: `plugin::${pluginId}.index.index-all`,
       subject: null,
     },
   ],
