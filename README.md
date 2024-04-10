@@ -90,9 +90,15 @@ export default ({ env }) => ({
 | contentTypes.idPrefix | Prefix for the item id                                                                  | string                                                                |                                       |
 | contentTypes.populate | Which fields needed to be indexed on Algolia, by default all the properties are indexed | [object](https://docs.strapi.io/dev-docs/api/entity-service/populate) | `'*'` = All fields                    |
 
-### 4. Endpoints
+## UI
 
-#### Index all the content of a content-type
+For each content type configured in the plugin, a new button will be added to the content type list. This button will allow you to index all the content of the content type.
+
+<img width="1492" alt="Capture d’écran 2024-04-04 à 15 14 50" src="https://github.com/wizbii/strapi-plugin-strapi-algolia/assets/3955239/72469d37-2648-4919-8437-0c2b82260edf">
+
+## Endpoints
+
+### Index all the content of a content-type
 
 Call the following endpoint `/strapi-algolia/index-all-articles` with POST method.
 
