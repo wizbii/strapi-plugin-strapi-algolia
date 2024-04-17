@@ -1,5 +1,12 @@
 
 
+## [1.5.1](https://github.com/wizbii/strapi-algolia/compare/v1.5.0...v1.5.1) (2024-04-17)
+
+
+### Bug Fixes
+
+ - changelog formatting - update homepage url link to strapi marketplace
+
 ## [1.5.0](https://github.com/wizbii/strapi-algolia/compare/v1.5.0-4...v1.5.0) (2024-04-02)
 
 
