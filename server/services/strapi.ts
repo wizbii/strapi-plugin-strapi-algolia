@@ -4,13 +4,17 @@ import { HookEvent } from '../../utils/event';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default ({ strapi }: { strapi: Strapi }) => ({
-  getStrapiObject: async (event: HookEvent, populate: any) => {
+  getStrapiObject: async (
+    event: HookEvent,
+    populate: any,
+    hideFields: string[]
+  ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
-    const algoliaService = strapiAlgolia.service('algolia');
+    const utilsService = strapiAlgolia.service('utils');
 
     const { model } = event;
     const modelUid = model.uid as Common.UID.ContentType;
-    const entryId = algoliaService.getEntryId(event);
+    const entryId = utilsService.getEntryId(event);
 
     if (!entryId) {
       throw new Error(`No entry id found in event.`);
@@ -27,17 +31,20 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         `No entry found for ${modelUid} with ID ${entryId}`
       );
     }
-    return strapiObject;
+
+    return utilsService.filterProperties(strapiObject, hideFields);
   },
   afterUpdateAndCreate: async (
     _events: any[],
     populate: any,
+    hideFields: string[],
     idPrefix: string,
     algoliaIndex: SearchIndex
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
     const strapiService = strapiAlgolia.service('strapi');
+    const utilsService = strapiAlgolia.service('utils');
 
     const objectsToSave: any[] = [];
     const objectsIdsToDelete: string[] = [];
@@ -46,12 +53,13 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
     for (const event of events) {
       try {
-        const entryId = `${idPrefix}${algoliaService.getEntryId(
+        const entryId = `${idPrefix}${utilsService.getEntryId(
           event
         )}`;
         const strapiObject = await strapiService.getStrapiObject(
           event,
-          populate
+          populate,
+          hideFields
         );
 
         if (strapiObject.publishedAt === null) {
