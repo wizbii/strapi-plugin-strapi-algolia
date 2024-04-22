@@ -1,21 +1,8 @@
 import { Strapi } from '@strapi/strapi';
 import { SearchIndex } from 'algoliasearch';
-import { HookEvent } from '../../utils/event';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default ({ strapi }: { strapi: Strapi }) => ({
-  getChunksRequests: (array: any[], chunkSize = 600) => {
-    if (chunkSize <= 0) {
-      throw new Error('chunkSize must be greater than 0');
-    }
-
-    const chunks: any[][] = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-      chunks.push(array.slice(i, i + chunkSize));
-    }
-
-    return chunks;
-  },
   getAlgoliaClient: async (applicationId: string, apiKey: string) => {
     const algoliasearch = await import('algoliasearch').then(
       (a) => a.default
@@ -28,12 +15,11 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     objectsIdsToDelete: string[],
     algoliaIndex: SearchIndex
   ) => {
-    const algoliaService = strapi
-      .plugin('strapi-algolia')
-      .service('algolia');
+    const strapiAlgolia = strapi.plugin('strapi-algolia');
+    const utilsService = strapiAlgolia.service('utils');
 
     if (objectsIdsToDelete.length) {
-      const chunkedObjectsToDelete = algoliaService.getChunksRequests(
+      const chunkedObjectsToDelete = utilsService.getChunksRequests(
         objectsIdsToDelete
       );
 
@@ -44,13 +30,11 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
     if (objectsToSave.length) {
       const chunkedObjectsToSave =
-        algoliaService.getChunksRequests(objectsToSave);
+        utilsService.getChunksRequests(objectsToSave);
 
       for (const chunk of chunkedObjectsToSave) {
         await algoliaIndex.saveObjects(chunk);
       }
     }
   },
-  getEntryId: (event: HookEvent) =>
-    event?.result?.id ?? event?.params?.where?.id,
 });

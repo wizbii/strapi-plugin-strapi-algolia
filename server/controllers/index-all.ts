@@ -27,6 +27,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
     const strapiService = strapiAlgolia.service('strapi');
+    const utilsService = strapiAlgolia.service('utils');
 
     const client = await algoliaService.getAlgoliaClient(
       applicationId,
@@ -54,6 +55,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       index,
       idPrefix = '',
       populate = '*',
+      hideFields = [],
     } = contentType;
 
     const indexName = `${indexPrefix}${index ?? name}`;
@@ -72,9 +74,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         }
       : { ...findManyBaseOptions };
 
-    const articles = await strapi.entityService?.findMany(
+    const articlesStrapi = await strapi.entityService?.findMany(
       name as any,
       findManyOptions
+    );
+    const articles = (articlesStrapi ?? []).map((article: any) =>
+      utilsService.filterProperties(article, hideFields)
     );
 
     await strapiService.afterUpdateAndCreateAlreadyPopulate(

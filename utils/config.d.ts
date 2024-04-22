@@ -7,5 +7,6 @@ export type StrapiAlgoliaConfig = {
     index: string;
     idPrefix?: string;
     populate: any;
+    hideFields?: string[];
   }[];
 };

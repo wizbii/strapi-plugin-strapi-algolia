@@ -31,6 +31,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         index,
         idPrefix = '',
         populate = '*',
+        hideFields = [],
       } = contentType;
 
       if (strapi.contentTypes[name]) {
@@ -43,6 +44,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
             await strapiService.afterUpdateAndCreate(
               [event],
               populate,
+              hideFields,
               idPrefix,
               algoliaIndex
             );
@@ -51,6 +53,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
             await strapiService.afterUpdateAndCreate(
               [event],
               populate,
+              hideFields,
               idPrefix,
               algoliaIndex
             );
