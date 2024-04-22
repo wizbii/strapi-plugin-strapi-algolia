@@ -1,10 +1,10 @@
-import algoliaServiceUtils from '../server/services/algolia';
-import strapiServiceUtils from '../server/services/strapi';
-import { HookEvent } from '../utils/event';
+import algoliaService from '../server/services/algolia';
+import strapiService from '../server/services/strapi';
+import utilsService from '../server/services/utils';
 import { validateConfig } from '../utils/validate';
 
 describe('strapi-algolia plugin', () => {
-  describe('validate utils', () => {
+  describe('validate configuration', () => {
     test('config validation', () => {
       expect(() => validateConfig({})).toThrow(
         /Algolia plugin configuration error:/
@@ -30,6 +30,7 @@ describe('strapi-algolia plugin', () => {
               index: 'indexName',
               idPrefix: 'id-prefix_',
               populate: { field: 'field' },
+              hideFields: ['field-hide'],
             },
           ],
         })
@@ -45,6 +46,7 @@ describe('strapi-algolia plugin', () => {
               name: 'api::contentType.contentType',
               idPrefix: 'id-prefix_',
               populate: { field: 'field' },
+              hideFields: ['field-hide'],
             },
           ],
         })
@@ -156,54 +158,7 @@ describe('strapi-algolia plugin', () => {
     });
   });
 
-  describe('algolia utils', () => {
-    test('getEntryId utils', () => {
-      expect(
-        algoliaServiceUtils({ strapi: {} as any }).getEntryId(
-          {} as any
-        )
-      ).toBeUndefined();
-      expect(
-        algoliaServiceUtils({ strapi: {} as any }).getEntryId({
-          result: {
-            id: 'idresult',
-          },
-        } as any)
-      ).toEqual('idresult');
-      expect(
-        algoliaServiceUtils({ strapi: {} as any }).getEntryId({
-          params: {
-            where: { id: 'idParams' },
-          },
-        } as any)
-      ).toEqual('idParams');
-    });
-
-    test('getChunksRequests utils', () => {
-      expect(
-        algoliaServiceUtils({ strapi: {} as any }).getChunksRequests(
-          [...Array(5).keys()],
-          2
-        )
-      ).toEqual([[0, 1], [2, 3], [4]]);
-      expect(
-        algoliaServiceUtils({ strapi: {} as any }).getChunksRequests(
-          [...Array(6).keys()],
-          2
-        )
-      ).toEqual([
-        [0, 1],
-        [2, 3],
-        [4, 5],
-      ]);
-      expect(() =>
-        algoliaServiceUtils({ strapi: {} as any }).getChunksRequests(
-          [...Array(6).keys()],
-          0
-        )
-      ).toThrow('chunkSize must be greater than 0');
-    });
-
+  describe('algolia service', () => {
     test('createOrDeleteObjects utils', async () => {
       const strapi: any = {
         plugin: jest.fn().mockReturnValue({
@@ -227,7 +182,7 @@ describe('strapi-algolia plugin', () => {
         saveObjects: jest.fn(),
       };
 
-      await algoliaServiceUtils({ strapi }).createOrDeleteObjects(
+      await algoliaService({ strapi }).createOrDeleteObjects(
         [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
         ['5', '6', '7', '8'],
         algoliaIndex as any
@@ -255,10 +210,19 @@ describe('strapi-algolia plugin', () => {
     });
   });
 
-  describe('strapi utils', () => {
+  describe('strapi service', () => {
     describe('getStrapiObject utils', () => {
       let strapi: any;
       const fakeArticle = {
+        article: {
+          id: 'id',
+          title: 'title',
+          content: 'content',
+          publishedAt: null,
+        },
+        hide: 'hide',
+      } as any;
+      const fakeArticleWithoutHide = {
         article: {
           id: 'id',
           title: 'title',
@@ -271,8 +235,9 @@ describe('strapi-algolia plugin', () => {
         strapi = {
           plugin: jest.fn().mockReturnValue({
             service: jest.fn().mockReturnValue({
-              getEntryId: (event: HookEvent) =>
-                event?.result?.id ?? event?.params?.where?.id,
+              getEntryId: utilsService({ strapi }).getEntryId,
+              filterProperties: utilsService({ strapi })
+                .filterProperties,
             }),
           }),
           entityService: {
@@ -285,13 +250,14 @@ describe('strapi-algolia plugin', () => {
 
       test('throw error when entry id not found', async () => {
         expect(
-          strapiServiceUtils({ strapi }).getStrapiObject(
+          strapiService({ strapi }).getStrapiObject(
             {
               model: {
                 uid: 'api::contentType.contentType',
               },
             } as any,
-            true
+            '*',
+            []
           )
         ).rejects.toThrow('No entry id found in event.');
       });
@@ -307,7 +273,7 @@ describe('strapi-algolia plugin', () => {
         } as any;
 
         expect(
-          strapiServiceUtils({ strapi }).getStrapiObject(
+          strapiService({ strapi }).getStrapiObject(
             {
               result: {
                 id: 'id',
@@ -316,7 +282,8 @@ describe('strapi-algolia plugin', () => {
                 uid: 'api::contentType.contentType',
               },
             } as any,
-            true
+            '*',
+            []
           )
         ).rejects.toThrow(
           'No entry found for api::contentType.contentType with ID id'
@@ -324,7 +291,7 @@ describe('strapi-algolia plugin', () => {
       });
 
       test('return a strapi object found with result', async () => {
-        const obj = await strapiServiceUtils({
+        const obj = await strapiService({
           strapi,
         }).getStrapiObject(
           {
@@ -335,7 +302,8 @@ describe('strapi-algolia plugin', () => {
               uid: 'api::contentType.contentType',
             },
           } as any,
-          '*'
+          '*',
+          []
         );
 
         expect(obj).toEqual(fakeArticle);
@@ -349,7 +317,7 @@ describe('strapi-algolia plugin', () => {
       });
 
       test('return a strapi object found with params', async () => {
-        const obj = await strapiServiceUtils({
+        const obj = await strapiService({
           strapi,
         }).getStrapiObject(
           {
@@ -362,7 +330,8 @@ describe('strapi-algolia plugin', () => {
               uid: 'api::contentType.contentType',
             },
           } as any,
-          '*'
+          '*',
+          []
         );
 
         expect(obj).toEqual(fakeArticle);
@@ -374,6 +343,100 @@ describe('strapi-algolia plugin', () => {
           }
         );
       });
+
+      test('return a strapi object with hidden fields found with params', async () => {
+        const obj = await strapiService({
+          strapi,
+        }).getStrapiObject(
+          {
+            params: {
+              where: {
+                id: 'id',
+              },
+            },
+            model: {
+              uid: 'api::contentType.contentType',
+            },
+          } as any,
+          '*',
+          ['hide']
+        );
+
+        expect(obj).toEqual(fakeArticleWithoutHide);
+        expect(strapi.entityService.findOne).toHaveBeenCalledWith(
+          'api::contentType.contentType',
+          'id',
+          {
+            populate: '*',
+          }
+        );
+      });
+    });
+  });
+
+  describe('utils service', () => {
+    test('getEntryId utils', () => {
+      expect(
+        utilsService({ strapi: {} as any }).getEntryId({} as any)
+      ).toBeUndefined();
+      expect(
+        utilsService({ strapi: {} as any }).getEntryId({
+          result: {
+            id: 'idresult',
+          },
+        } as any)
+      ).toEqual('idresult');
+      expect(
+        utilsService({ strapi: {} as any }).getEntryId({
+          params: {
+            where: { id: 'idParams' },
+          },
+        } as any)
+      ).toEqual('idParams');
+    });
+
+    test('filterProperties utils', () => {
+      const obj = {
+        id: 'id',
+        title: 'title',
+        content: 'content',
+        hide: 'hide',
+      };
+
+      expect(
+        utilsService({ strapi: {} as any }).filterProperties(obj, [
+          'hide',
+        ])
+      ).toEqual({
+        id: 'id',
+        title: 'title',
+        content: 'content',
+      });
+    });
+
+    test('getChunksRequests utils', () => {
+      expect(
+        utilsService({ strapi: {} as any }).getChunksRequests(
+          [...Array(5).keys()],
+          2
+        )
+      ).toEqual([[0, 1], [2, 3], [4]]);
+      expect(
+        utilsService({ strapi: {} as any }).getChunksRequests(
+          [...Array(6).keys()],
+          2
+        )
+      ).toEqual([
+        [0, 1],
+        [2, 3],
+        [4, 5],
+      ]);
+      expect(() =>
+        utilsService({ strapi: {} as any }).getChunksRequests(
+          [...Array(6).keys()],
+          0
+        )
+      ).toThrow('chunkSize must be greater than 0');
     });
   });
 });
