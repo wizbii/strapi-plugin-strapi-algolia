@@ -1,5 +1,7 @@
 
 
+## [1.7.0](https://github.com/wizbii/strapi-algolia/compare/v1.7.0-1...v1.7.0) (2024-04-30)
+
 ## [1.7.0-1](https://github.com/wizbii/strapi-algolia/compare/v1.7.0-0...v1.7.0-1) (2024-04-30)
 
 
