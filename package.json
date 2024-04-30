@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-strapi-algolia",
-  "version": "1.7.0-0",
+  "version": "1.7.0-1",
   "description": "Index articles configured to Algolia",
   "keywords": [
     "strapi",
