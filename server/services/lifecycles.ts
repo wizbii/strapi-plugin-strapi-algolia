@@ -32,6 +32,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         idPrefix = '',
         populate = '*',
         hideFields = [],
+        transformToBooleanFields = [],
       } = contentType;
 
       if (strapi.contentTypes[name]) {
@@ -45,6 +46,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
               [event],
               populate,
               hideFields,
+              transformToBooleanFields,
               idPrefix,
               algoliaIndex
             );
@@ -54,6 +56,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
               [event],
               populate,
               hideFields,
+              transformToBooleanFields,
               idPrefix,
               algoliaIndex
             );

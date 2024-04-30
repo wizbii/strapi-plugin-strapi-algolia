@@ -31,6 +31,7 @@ describe('strapi-algolia plugin', () => {
               idPrefix: 'id-prefix_',
               populate: { field: 'field' },
               hideFields: ['field-hide'],
+              transformToBooleanFiels: ['field-bool'],
             },
           ],
         })
@@ -47,6 +48,7 @@ describe('strapi-algolia plugin', () => {
               idPrefix: 'id-prefix_',
               populate: { field: 'field' },
               hideFields: ['field-hide'],
+              transformToBooleanFiels: ['field-bool'],
             },
           ],
         })
@@ -159,8 +161,10 @@ describe('strapi-algolia plugin', () => {
   });
 
   describe('algolia service', () => {
-    test('createOrDeleteObjects utils', async () => {
-      const strapi: any = {
+    let strapi: any;
+
+    beforeEach(() => {
+      strapi = {
         plugin: jest.fn().mockReturnValue({
           service: jest.fn().mockReturnValue({
             getChunksRequests: jest
@@ -171,21 +175,29 @@ describe('strapi-algolia plugin', () => {
               ])
               .mockReturnValueOnce([
                 [{ id: 1 }, { id: 2 }],
-                [{ id: 3 }, { id: 4 }],
+                [{ id: 3 }, { id: 4, toto: null, tata: null }],
               ]),
           }),
         }),
       };
+    });
 
+    test('createOrDeleteObjects utils', async () => {
       const algoliaIndex = {
         deleteObjects: jest.fn(),
         saveObjects: jest.fn(),
       };
 
       await algoliaService({ strapi }).createOrDeleteObjects(
-        [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+        [
+          { id: 1 },
+          { id: 2 },
+          { id: 3 },
+          { id: 4, toto: null, tata: null },
+        ],
         ['5', '6', '7', '8'],
-        algoliaIndex as any
+        algoliaIndex as any,
+        ['toto']
       );
 
       expect(algoliaIndex.deleteObjects).toHaveBeenCalledTimes(2);
@@ -205,7 +217,7 @@ describe('strapi-algolia plugin', () => {
       ]);
       expect(algoliaIndex.saveObjects).toHaveBeenNthCalledWith(2, [
         { id: 3 },
-        { id: 4 },
+        { id: 4, toto: false, tata: null },
       ]);
     });
   });

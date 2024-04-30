@@ -8,5 +8,6 @@ export type StrapiAlgoliaConfig = {
     idPrefix?: string;
     populate: any;
     hideFields?: string[];
+    transformToBooleanFields?: string[];
   }[];
 };

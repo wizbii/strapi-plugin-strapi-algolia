@@ -16,6 +16,7 @@ export const validateConfig = (config: unknown) => {
             // https://docs.strapi.io/dev-docs/api/entity-service/populate
             populate: yup.object(),
             hideFields: yup.array().of(yup.string()),
+            transformToBooleanFields: yup.array().of(yup.string()),
           })
         ),
       })
