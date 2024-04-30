@@ -1,5 +1,6 @@
 import { Strapi } from '@strapi/strapi';
 import { SearchIndex } from 'algoliasearch';
+import { transformNullToBoolean } from '../../utils/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default ({ strapi }: { strapi: Strapi }) => ({
@@ -13,7 +14,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   createOrDeleteObjects: async (
     objectsToSave: any[],
     objectsIdsToDelete: string[],
-    algoliaIndex: SearchIndex
+    algoliaIndex: SearchIndex,
+    transformToBooleanFields: string[] = []
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const utilsService = strapiAlgolia.service('utils');
@@ -29,11 +31,14 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
 
     if (objectsToSave.length) {
-      const chunkedObjectsToSave =
+      const chunkedObjectsToSave: any[][] =
         utilsService.getChunksRequests(objectsToSave);
 
       for (const chunk of chunkedObjectsToSave) {
-        await algoliaIndex.saveObjects(chunk);
+        const cleanedChunk = chunk.map((c) =>
+          transformNullToBoolean(c, transformToBooleanFields)
+        );
+        await algoliaIndex.saveObjects(cleanedChunk);
       }
     }
   },

@@ -38,6 +38,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     _events: any[],
     populate: any,
     hideFields: string[],
+    transformToBooleanFields: string[],
     idPrefix: string,
     algoliaIndex: SearchIndex
   ) => {
@@ -84,13 +85,15 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     await algoliaService.createOrDeleteObjects(
       objectsToSave,
       objectsIdsToDelete,
-      algoliaIndex
+      algoliaIndex,
+      transformToBooleanFields
     );
   },
   afterUpdateAndCreateAlreadyPopulate: async (
     articles: any[],
     idPrefix: string,
-    algoliaIndex: SearchIndex
+    algoliaIndex: SearchIndex,
+    transformToBooleanFields: string[] = []
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
@@ -126,7 +129,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     await algoliaService.createOrDeleteObjects(
       objectsToSave,
       objectsIdsToDelete,
-      algoliaIndex
+      algoliaIndex,
+      transformToBooleanFields
     );
   },
   afterDeleteOneOrMany: async (

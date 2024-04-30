@@ -56,6 +56,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       idPrefix = '',
       populate = '*',
       hideFields = [],
+      transformToBooleanFields = [],
     } = contentType;
 
     const indexName = `${indexPrefix}${index ?? name}`;
@@ -85,7 +86,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     await strapiService.afterUpdateAndCreateAlreadyPopulate(
       articles,
       idPrefix,
-      algoliaIndex
+      algoliaIndex,
+      transformToBooleanFields
     );
 
     return ctx.send({
