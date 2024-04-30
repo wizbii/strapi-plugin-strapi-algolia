@@ -3,8 +3,11 @@ import { transformNullToBoolean } from './utils';
 describe('Utils', () => {
   describe('transformNullToBoolean', () => {
     test('should transform null to false', () => {
-      expect(transformNullToBoolean({ a: null }, ['a'])).toEqual({
+      expect(
+        transformNullToBoolean({ a: null, b: [3, 4] }, ['a'])
+      ).toEqual({
         a: false,
+        b: [3, 4],
       });
       expect(
         transformNullToBoolean(

@@ -2,7 +2,7 @@ export const transformNullToBoolean = (
   obj: any,
   transformToBooleanFields: string[]
 ): any => {
-  const newObj = {};
+  const newObj = Array.isArray(obj) ? [] : {};
 
   for (const key in obj) {
     if (obj[key] === null) {
