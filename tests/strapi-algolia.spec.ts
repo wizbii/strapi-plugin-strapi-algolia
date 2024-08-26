@@ -183,10 +183,11 @@ describe('strapi-algolia plugin', () => {
     });
 
     test('createOrDeleteObjects utils', async () => {
-      const algoliaIndex = {
+      const algoliaClient = {
         deleteObjects: jest.fn(),
         saveObjects: jest.fn(),
       };
+      const indexName = 'index-name';
 
       await algoliaService({ strapi }).createOrDeleteObjects(
         [
@@ -196,29 +197,30 @@ describe('strapi-algolia plugin', () => {
           { id: 4, toto: null, tata: null },
         ],
         ['5', '6', '7', '8'],
-        algoliaIndex as any,
+        algoliaClient as any,
+        indexName,
         ['toto']
       );
 
-      expect(algoliaIndex.deleteObjects).toHaveBeenCalledTimes(2);
-      expect(algoliaIndex.deleteObjects).toHaveBeenNthCalledWith(1, [
-        '5',
-        '6',
-      ]);
-      expect(algoliaIndex.deleteObjects).toHaveBeenNthCalledWith(2, [
-        '7',
-        '8',
-      ]);
+      expect(algoliaClient.deleteObjects).toHaveBeenCalledTimes(2);
+      expect(algoliaClient.deleteObjects).toHaveBeenNthCalledWith(1, {
+        indexName,
+        objectIDs: ['5', '6'],
+      });
+      expect(algoliaClient.deleteObjects).toHaveBeenNthCalledWith(2, {
+        objectIDs: ['7', '8'],
+        indexName,
+      });
 
-      expect(algoliaIndex.saveObjects).toHaveBeenCalledTimes(2);
-      expect(algoliaIndex.saveObjects).toHaveBeenNthCalledWith(1, [
-        { id: 1 },
-        { id: 2 },
-      ]);
-      expect(algoliaIndex.saveObjects).toHaveBeenNthCalledWith(2, [
-        { id: 3 },
-        { id: 4, toto: false, tata: null },
-      ]);
+      expect(algoliaClient.saveObjects).toHaveBeenCalledTimes(2);
+      expect(algoliaClient.saveObjects).toHaveBeenNthCalledWith(1, {
+        indexName,
+        objects: [{ id: 1 }, { id: 2 }],
+      });
+      expect(algoliaClient.saveObjects).toHaveBeenNthCalledWith(2, {
+        indexName,
+        objects: [{ id: 3 }, { id: 4, toto: false, tata: null }],
+      });
     });
   });
 
