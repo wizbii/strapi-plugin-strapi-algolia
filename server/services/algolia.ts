@@ -1,20 +1,18 @@
 import { Strapi } from '@strapi/strapi';
-import { SearchIndex } from 'algoliasearch';
+import type { algoliasearch as algoliasearchType } from 'algoliasearch';
 import { transformNullToBoolean } from '../../utils/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default ({ strapi }: { strapi: Strapi }) => ({
   getAlgoliaClient: async (applicationId: string, apiKey: string) => {
-    const algoliasearch = await import('algoliasearch').then(
-      (a) => a.default
-    );
-    const client = algoliasearch(applicationId, apiKey);
-    return client;
+    const { algoliasearch } = await import('algoliasearch');
+    return algoliasearch(applicationId, apiKey);
   },
   createOrDeleteObjects: async (
     objectsToSave: any[],
     objectsIdsToDelete: string[],
-    algoliaIndex: SearchIndex,
+    algoliaClient: ReturnType<typeof algoliasearchType>,
+    indexName: string,
     transformToBooleanFields: string[] = []
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
@@ -26,7 +24,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       );
 
       for (const chunk of chunkedObjectsToDelete) {
-        await algoliaIndex.deleteObjects(chunk);
+        await algoliaClient.deleteObjects({
+          indexName,
+          objectIDs: chunk,
+        });
       }
     }
 
@@ -38,7 +39,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         const cleanedChunk = chunk.map((c) =>
           transformNullToBoolean(c, transformToBooleanFields)
         );
-        await algoliaIndex.saveObjects(cleanedChunk);
+        await algoliaClient.saveObjects({
+          indexName,
+          objects: cleanedChunk,
+        });
       }
     }
   },

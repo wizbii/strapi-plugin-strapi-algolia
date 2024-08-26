@@ -37,7 +37,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
       if (strapi.contentTypes[name]) {
         const indexName = `${indexPrefix}${index ?? name}`;
-        const algoliaIndex = client.initIndex(indexName);
 
         strapi.db?.lifecycles.subscribe({
           models: [name],
@@ -48,7 +47,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
               hideFields,
               transformToBooleanFields,
               idPrefix,
-              algoliaIndex
+              client,
+              indexName
             );
           },
           afterUpdate: async (event) => {
@@ -58,14 +58,16 @@ export default ({ strapi }: { strapi: Strapi }) => ({
               hideFields,
               transformToBooleanFields,
               idPrefix,
-              algoliaIndex
+              client,
+              indexName
             );
           },
           afterDelete: async (event) => {
             await strapiService.afterDeleteOneOrMany(
               event,
               idPrefix,
-              algoliaIndex,
+              client,
+              indexName,
               false
             );
           },
@@ -73,7 +75,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
             await strapiService.afterDeleteOneOrMany(
               event,
               idPrefix,
-              algoliaIndex,
+              client,
+              indexName,
               true
             );
           },

@@ -1,5 +1,5 @@
 import { Common, Strapi } from '@strapi/strapi';
-import { SearchIndex } from 'algoliasearch';
+import { algoliasearch } from 'algoliasearch';
 import { HookEvent } from '../../utils/event';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,7 +40,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     hideFields: string[],
     transformToBooleanFields: string[],
     idPrefix: string,
-    algoliaIndex: SearchIndex
+    algoliaClient: ReturnType<typeof algoliasearch>,
+    indexName: string
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
@@ -50,7 +51,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     const objectsToSave: any[] = [];
     const objectsIdsToDelete: string[] = [];
     const events = _events as HookEvent[];
-    const indexExist = await algoliaIndex.exists();
 
     for (const event of events) {
       try {
@@ -64,9 +64,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         );
 
         if (strapiObject.publishedAt === null) {
-          if (indexExist) {
-            objectsIdsToDelete.push(entryId);
-          }
+          objectsIdsToDelete.push(entryId);
         } else if (strapiObject.publishedAt !== null) {
           objectsToSave.push({
             objectID: entryId,
@@ -85,14 +83,16 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     await algoliaService.createOrDeleteObjects(
       objectsToSave,
       objectsIdsToDelete,
-      algoliaIndex,
+      algoliaClient,
+      indexName,
       transformToBooleanFields
     );
   },
   afterUpdateAndCreateAlreadyPopulate: async (
     articles: any[],
     idPrefix: string,
-    algoliaIndex: SearchIndex,
+    algoliaClient: ReturnType<typeof algoliasearch>,
+    indexName: string,
     transformToBooleanFields: string[] = []
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
@@ -100,7 +100,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
     const objectsToSave: any[] = [];
     const objectsIdsToDelete: string[] = [];
-    const indexExist = await algoliaIndex.exists();
 
     for (const article of articles) {
       try {
@@ -108,9 +107,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         const entryIdWithPrefix = `${idPrefix}${entryId}`;
 
         if (article.publishedAt === null) {
-          if (indexExist) {
-            objectsIdsToDelete.push(entryIdWithPrefix);
-          }
+          objectsIdsToDelete.push(entryIdWithPrefix);
         } else if (article.publishedAt !== null) {
           objectsToSave.push({
             objectID: entryIdWithPrefix,
@@ -129,14 +126,16 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     await algoliaService.createOrDeleteObjects(
       objectsToSave,
       objectsIdsToDelete,
-      algoliaIndex,
+      algoliaClient,
+      indexName,
       transformToBooleanFields
     );
   },
   afterDeleteOneOrMany: async (
     _event: any,
     idPrefix: string,
-    algoliaIndex: SearchIndex,
+    algoliaClient: ReturnType<typeof algoliasearch>,
+    indexName: string,
     many: boolean
   ) => {
     try {
@@ -148,7 +147,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         (id: string) => `${idPrefix}${id}`
       );
 
-      await algoliaIndex.deleteObjects(objectIDs);
+      await algoliaClient.deleteObjects({ indexName, objectIDs });
     } catch (error) {
       console.error(
         `Error while deleting object(s) from Algolia index: ${error}`

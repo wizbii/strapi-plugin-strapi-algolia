@@ -60,7 +60,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     } = contentType;
 
     const indexName = `${indexPrefix}${index ?? name}`;
-    const algoliaIndex = client.initIndex(indexName);
 
     const allLocales =
       await strapi.plugins?.i18n?.services?.locales?.find();
@@ -86,7 +85,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     await strapiService.afterUpdateAndCreateAlreadyPopulate(
       articles,
       idPrefix,
-      algoliaIndex,
+      client,
+      indexName,
       transformToBooleanFields
     );
 
