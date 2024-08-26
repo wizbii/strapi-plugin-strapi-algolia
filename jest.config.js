@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-require-imports */
 /* eslint-disable no-undef */
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 const { defaults: tsjPreset } = require('ts-jest/presets');
