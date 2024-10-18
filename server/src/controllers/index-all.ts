@@ -1,8 +1,8 @@
-import { Strapi } from '@strapi/strapi';
+import type { Core, UID } from '@strapi/strapi';
 import Koa from 'koa';
-import { StrapiAlgoliaConfig } from '../../utils/config';
+import { StrapiAlgoliaConfig } from '../../../utils/config';
 
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
   async index(
     ctx: Koa.Context & {
       request: {
@@ -17,7 +17,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       applicationId,
       apiKey,
     } = strapi.config.get(
-      'plugin.strapi-algolia'
+      'plugin::strapi-algolia'
     ) as StrapiAlgoliaConfig;
 
     if (!contentTypes) {
@@ -74,10 +74,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         }
       : { ...findManyBaseOptions };
 
-    const articlesStrapi = await strapi.entityService?.findMany(
-      name as any,
-      findManyOptions
-    );
+    const articlesStrapi = await strapi
+      .documents(name as UID.ContentType)
+      .findMany(findManyOptions);
     const articles = (articlesStrapi ?? []).map((article: any) =>
       utilsService.filterProperties(article, hideFields)
     );

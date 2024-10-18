@@ -1,7 +1,7 @@
-import { Strapi } from '@strapi/strapi';
-import { StrapiAlgoliaConfig } from '../../utils/config';
+import type { Core } from '@strapi/strapi';
+import { StrapiAlgoliaConfig } from '../../../utils/config';
 
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
   async loadLifecycleMethods() {
     const {
       indexPrefix = '',
@@ -9,7 +9,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       applicationId,
       apiKey,
     } = strapi.config.get(
-      'plugin.strapi-algolia'
+      'plugin::strapi-algolia'
     ) as StrapiAlgoliaConfig;
 
     if (!contentTypes) {

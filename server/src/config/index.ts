@@ -1,4 +1,4 @@
-import { validateConfig } from '../../utils/validate';
+import { validateConfig } from '../../../utils/validate';
 
 export default {
   default: {
