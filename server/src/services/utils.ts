@@ -1,8 +1,8 @@
-import { Strapi } from '@strapi/strapi';
-import { HookEvent } from '../../utils/event';
+import type { Core } from '@strapi/strapi';
+import { HookEvent } from '../../../utils/event';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
   filterProperties: (
     object: Record<string, any>,
     hiddenFields: string[]

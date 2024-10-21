@@ -1,9 +1,9 @@
-import { Strapi } from '@strapi/strapi';
+import type { Core } from '@strapi/strapi';
 import type { algoliasearch as algoliasearchType } from 'algoliasearch';
-import { transformNullToBoolean } from '../../utils/utils';
+import { transformNullToBoolean } from '../../../utils/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
   getAlgoliaClient: async (applicationId: string, apiKey: string) => {
     const { algoliasearch } = await import('algoliasearch');
     return algoliasearch(applicationId, apiKey);

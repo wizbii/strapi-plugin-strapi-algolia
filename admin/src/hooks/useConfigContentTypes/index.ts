@@ -1,13 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import {
-  useFetchClient,
-  useNotification,
-} from '@strapi/helper-plugin';
+import { useNotification } from '@strapi/strapi/admin';
 import { useEffect, useReducer, useRef } from 'react';
 import pluginId from '../../pluginId';
 import init from './init';
 import reducer, { Actions, initialState } from './reducer';
+
+import { useFetchClient } from '@strapi/strapi/admin';
 
 const useConfigContentTypes = (shouldFetchData = true) => {
   const [{ contentTypes, isLoading }, dispatch] = useReducer(
@@ -15,7 +12,7 @@ const useConfigContentTypes = (shouldFetchData = true) => {
     initialState,
     () => init(initialState, shouldFetchData)
   );
-  const toggleNotification = useNotification();
+  const { toggleNotification } = useNotification();
   const client = useFetchClient();
 
   const isMounted = useRef(true);
@@ -42,7 +39,6 @@ const useConfigContentTypes = (shouldFetchData = true) => {
       const { data } = await client.get(
         `/${pluginId}/config/content-types`,
         {
-          method: 'GET',
           signal,
         }
       );

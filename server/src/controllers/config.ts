@@ -1,8 +1,8 @@
-import { Strapi } from '@strapi/strapi';
+import type { Core } from '@strapi/strapi';
 import Koa from 'koa';
-import { StrapiAlgoliaConfig } from '../../utils/config';
+import { StrapiAlgoliaConfig } from '../../../utils/config';
 
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
   async contentTypes(
     ctx: Koa.Context & {
       request: {
@@ -12,7 +12,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   ) {
     const { contentTypes } = strapi.config.get(
-      'plugin.strapi-algolia'
+      'plugin::strapi-algolia'
     ) as StrapiAlgoliaConfig;
 
     if (!contentTypes) {

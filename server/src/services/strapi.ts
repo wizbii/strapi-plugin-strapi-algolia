@@ -1,9 +1,9 @@
-import { Common, Strapi } from '@strapi/strapi';
+import { Core, UID } from '@strapi/strapi';
 import { algoliasearch } from 'algoliasearch';
-import { HookEvent } from '../../utils/event';
+import { HookEvent } from '../../../utils/event';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
   getStrapiObject: async (
     event: HookEvent,
     populate: any,
@@ -13,18 +13,17 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     const utilsService = strapiAlgolia.service('utils');
 
     const { model } = event;
-    const modelUid = model.uid as Common.UID.ContentType;
+    const modelUid = model.uid as UID.ContentType;
     const entryId = utilsService.getEntryId(event);
 
     if (!entryId) {
       throw new Error(`No entry id found in event.`);
     }
 
-    const strapiObject = await strapi.entityService?.findOne(
-      modelUid,
-      entryId,
-      { populate }
-    );
+    const strapiObject = await strapi.documents(modelUid).findOne({
+      documentId: entryId,
+      populate,
+    });
 
     if (!strapiObject) {
       throw new Error(

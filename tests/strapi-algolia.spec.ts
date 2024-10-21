@@ -1,6 +1,6 @@
-import algoliaService from '../server/services/algolia';
-import strapiService from '../server/services/strapi';
-import utilsService from '../server/services/utils';
+import algoliaService from '../server/src/services/algolia';
+import strapiService from '../server/src/services/strapi';
+import utilsService from '../server/src/services/utils';
 import { validateConfig } from '../utils/validate';
 
 describe('strapi-algolia plugin', () => {
@@ -254,11 +254,11 @@ describe('strapi-algolia plugin', () => {
                 .filterProperties,
             }),
           }),
-          entityService: {
+          documents: jest.fn().mockReturnValue({
             findOne: jest
               .fn()
               .mockReturnValue(Promise.resolve(fakeArticle)),
-          },
+          }),
         } as any;
       });
 
@@ -279,11 +279,11 @@ describe('strapi-algolia plugin', () => {
       test('throw error when object not found', async () => {
         strapi = {
           ...strapi,
-          entityService: {
+          documents: jest.fn().mockReturnValue({
             findOne: jest
               .fn()
               .mockReturnValue(Promise.resolve(undefined)),
-          },
+          }),
         } as any;
 
         expect(
@@ -321,13 +321,13 @@ describe('strapi-algolia plugin', () => {
         );
 
         expect(obj).toEqual(fakeArticle);
-        expect(strapi.entityService.findOne).toHaveBeenCalledWith(
-          'api::contentType.contentType',
-          'id',
-          {
-            populate: '*',
-          }
+        expect(strapi.documents).toHaveBeenCalledWith(
+          'api::contentType.contentType'
         );
+        expect(strapi.documents().findOne).toHaveBeenCalledWith({
+          documentId: 'id',
+          populate: '*',
+        });
       });
 
       test('return a strapi object found with params', async () => {
@@ -349,13 +349,13 @@ describe('strapi-algolia plugin', () => {
         );
 
         expect(obj).toEqual(fakeArticle);
-        expect(strapi.entityService.findOne).toHaveBeenCalledWith(
-          'api::contentType.contentType',
-          'id',
-          {
-            populate: '*',
-          }
+        expect(strapi.documents).toHaveBeenCalledWith(
+          'api::contentType.contentType'
         );
+        expect(strapi.documents().findOne).toHaveBeenCalledWith({
+          documentId: 'id',
+          populate: '*',
+        });
       });
 
       test('return a strapi object with hidden fields found with params', async () => {
@@ -377,13 +377,13 @@ describe('strapi-algolia plugin', () => {
         );
 
         expect(obj).toEqual(fakeArticleWithoutHide);
-        expect(strapi.entityService.findOne).toHaveBeenCalledWith(
-          'api::contentType.contentType',
-          'id',
-          {
-            populate: '*',
-          }
+        expect(strapi.documents).toHaveBeenCalledWith(
+          'api::contentType.contentType'
         );
+        expect(strapi.documents().findOne).toHaveBeenCalledWith({
+          documentId: 'id',
+          populate: '*',
+        });
       });
     });
   });

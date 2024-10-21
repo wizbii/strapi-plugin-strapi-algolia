@@ -12,16 +12,32 @@ A strapi plugin to sync your strapi content with Algolia.
 
 ### 1. Installation
 
-#### With Yarn
+#### Strapi v5 - Use latest version
+
+##### With Yarn
 
 ```bash
-yarn add strapi-plugin-strapi-algolia
+yarn add strapi-plugin-strapi-algolia@latest
 ```
 
-##### With NPM
+###### With NPM
 
 ```bash
-npm install --save strapi-plugin-strapi-algolia
+npm install --save strapi-plugin-strapi-algolia@latest
+```
+
+#### Strapi v4 - Use version 1.x.x
+
+##### With Yarn
+
+```bash
+yarn add strapi-plugin-strapi-algolia@1
+```
+
+###### With NPM
+
+```bash
+npm install --save strapi-plugin-strapi-algolia@1
 ```
 
 ### 2. Setup environment variables
