@@ -88,7 +88,8 @@
     "release-it": "^17.10.0",
     "styled-components": "^6.1.13",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vite": ">=5.2.14"
   },
   "peerDependencies": {
     "@strapi/sdk-plugin": "^5.2.7",
