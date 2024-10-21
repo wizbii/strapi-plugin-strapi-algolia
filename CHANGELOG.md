@@ -1,5 +1,12 @@
 
 
+## [2.0.0](https://github.com/wizbii/strapi-algolia/compare/v1.8.0...v2.0.0) (2024-10-21)
+
+
+### Features
+
+ - upgrade Strapi to v5
+
 ## [1.8.0](https://github.com/wizbii/strapi-algolia/compare/v1.7.1...v1.8.0) (2024-08-26)
 
 
