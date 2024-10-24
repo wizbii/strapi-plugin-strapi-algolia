@@ -21,7 +21,11 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     }
 
     const strapiObject = await strapi.documents(modelUid).findOne({
-      documentId: entryId,
+      documentId: event.result.documentId,
+      // the documentId can have a published & unpublished version associated
+      // without a status filter, the unpublished version could be returned even if a published on exists,
+      // which would incorrectly de-index.
+      status: 'published',
       populate,
     });
 
@@ -64,7 +68,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
 
         if (strapiObject.publishedAt === null) {
           objectsIdsToDelete.push(entryId);
-        } else if (strapiObject.publishedAt !== null) {
+        } else {
           objectsToSave.push({
             objectID: entryId,
             ...strapiObject,
@@ -107,7 +111,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
 
         if (article.publishedAt === null) {
           objectsIdsToDelete.push(entryIdWithPrefix);
-        } else if (article.publishedAt !== null) {
+        } else {
           objectsToSave.push({
             objectID: entryIdWithPrefix,
             ...article,

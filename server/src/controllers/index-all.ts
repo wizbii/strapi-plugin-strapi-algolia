@@ -66,7 +66,9 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     const localeFilter = allLocales?.map(
       (locale: any) => locale.code
     );
-    const findManyBaseOptions = { populate };
+    const findManyBaseOptions = {
+      populate
+    };
     const findManyOptions = localeFilter
       ? {
           ...findManyBaseOptions,
@@ -74,9 +76,18 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         }
       : { ...findManyBaseOptions };
 
-    const articlesStrapi = await strapi
+    // Can't fetch draft & published articles in the same query (no status filter = draft only)
+    const publishedArticlesStrapi = await strapi
       .documents(name as UID.ContentType)
-      .findMany(findManyOptions);
+      .findMany({...findManyOptions, status: 'published'}) ?? [];
+    const draftArticlesStrapi = await strapi
+      .documents(name as UID.ContentType)
+      .findMany({...findManyOptions, status: 'draft'}) ?? [];
+    // Concatenate all published articles + any draft versions which aren't published
+    // Filtering out any draft articles which have a published version
+    const articlesStrapi = publishedArticlesStrapi.concat(draftArticlesStrapi.filter(
+      (draft: any) => !publishedArticlesStrapi.some((published: any) => published.id === draft.id))
+    );
     const articles = (articlesStrapi ?? []).map((article: any) =>
       utilsService.filterProperties(article, hideFields)
     );
