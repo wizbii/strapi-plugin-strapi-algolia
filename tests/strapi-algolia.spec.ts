@@ -229,7 +229,8 @@ describe('strapi-algolia plugin', () => {
       let strapi: any;
       const fakeArticle = {
         article: {
-          id: 'id',
+          id: 123,
+          documentId: 'id',
           title: 'title',
           content: 'content',
           publishedAt: null,
@@ -238,7 +239,8 @@ describe('strapi-algolia plugin', () => {
       } as any;
       const fakeArticleWithoutHide = {
         article: {
-          id: 'id',
+          id: 123,
+          documentId: 'id',
           title: 'title',
           content: 'content',
           publishedAt: null,
@@ -290,7 +292,8 @@ describe('strapi-algolia plugin', () => {
           strapiService({ strapi }).getStrapiObject(
             {
               result: {
-                id: 'id',
+                id: 123,
+                documentId: 'id',
               },
               model: {
                 uid: 'api::contentType.contentType',
@@ -300,7 +303,7 @@ describe('strapi-algolia plugin', () => {
             []
           )
         ).rejects.toThrow(
-          'No entry found for api::contentType.contentType with ID id'
+          'No entry found for api::contentType.contentType with ID 123'
         );
       });
 
@@ -310,7 +313,8 @@ describe('strapi-algolia plugin', () => {
         }).getStrapiObject(
           {
             result: {
-              id: 'id',
+              id: 123,
+              documentId: 'id',
             },
             model: {
               uid: 'api::contentType.contentType',
@@ -327,6 +331,7 @@ describe('strapi-algolia plugin', () => {
         expect(strapi.documents().findOne).toHaveBeenCalledWith({
           documentId: 'id',
           populate: '*',
+          status: 'published',
         });
       });
 
@@ -337,11 +342,14 @@ describe('strapi-algolia plugin', () => {
           {
             params: {
               where: {
-                id: 'id',
+                id: 123,
               },
             },
             model: {
               uid: 'api::contentType.contentType',
+            },
+            result: {
+              documentId: 'id',
             },
           } as any,
           '*',
@@ -355,6 +363,7 @@ describe('strapi-algolia plugin', () => {
         expect(strapi.documents().findOne).toHaveBeenCalledWith({
           documentId: 'id',
           populate: '*',
+          status: 'published',
         });
       });
 
@@ -365,11 +374,15 @@ describe('strapi-algolia plugin', () => {
           {
             params: {
               where: {
-                id: 'id',
+                id: 123,
+                status: 'published',
               },
             },
             model: {
               uid: 'api::contentType.contentType',
+            },
+            result: {
+              documentId: 'id',
             },
           } as any,
           '*',
@@ -383,6 +396,7 @@ describe('strapi-algolia plugin', () => {
         expect(strapi.documents().findOne).toHaveBeenCalledWith({
           documentId: 'id',
           populate: '*',
+          status: 'published',
         });
       });
     });
@@ -396,10 +410,11 @@ describe('strapi-algolia plugin', () => {
       expect(
         utilsService({ strapi: {} as any }).getEntryId({
           result: {
-            id: 'idresult',
+            documentId: 'idresult',
+            id: 123,
           },
         } as any)
-      ).toEqual('idresult');
+      ).toEqual(123);
       expect(
         utilsService({ strapi: {} as any }).getEntryId({
           params: {
