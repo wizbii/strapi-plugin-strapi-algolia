@@ -1,5 +1,12 @@
 
 
+## [2.0.1](https://github.com/wizbii/strapi-algolia/compare/v2.0.0...v2.0.1) (2024-10-28)
+
+
+### Bug Fixes
+
+ - formatting & tests - strapi 5 compatibility
+
 ## [2.0.0](https://github.com/wizbii/strapi-algolia/compare/v1.8.0...v2.0.0) (2024-10-21)
 
 
