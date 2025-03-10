@@ -16,9 +16,8 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       contentTypes,
       applicationId,
       apiKey,
-    } = strapi.config.get(
-      'plugin::strapi-algolia'
-    ) as StrapiAlgoliaConfig;
+      transformerCallback
+    } = strapi.config.get('plugin::strapi-algolia') as StrapiAlgoliaConfig;
 
     if (!contentTypes) {
       return;
@@ -56,7 +55,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       idPrefix = '',
       populate = '*',
       hideFields = [],
-      transformToBooleanFields = [],
+      transformToBooleanFields = []
     } = contentType;
 
     const indexName = `${indexPrefix}${index ?? name}`;
@@ -100,11 +99,13 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     );
 
     await strapiService.afterUpdateAndCreateAlreadyPopulate(
+      body.name,
       articles,
       idPrefix,
       client,
       indexName,
-      transformToBooleanFields
+      transformToBooleanFields,
+      transformerCallback
     );
 
     return ctx.send({

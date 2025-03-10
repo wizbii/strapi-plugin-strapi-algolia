@@ -42,9 +42,11 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     populate: any,
     hideFields: string[],
     transformToBooleanFields: string[],
+    transformerCallback: (string, any) => any | null,
     idPrefix: string,
     algoliaClient: ReturnType<typeof algoliasearch>,
-    indexName: string
+    indexName: string,
+    contentType: string
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
@@ -57,9 +59,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
 
     for (const event of events) {
       try {
-        const entryId = `${idPrefix}${utilsService.getEntryId(
-          event
-        )}`;
+        const entryId = `${idPrefix}${utilsService.getEntryId(event)}`;
         const strapiObject = await strapiService.getStrapiObject(
           event,
           populate,
@@ -71,6 +71,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         } else {
           objectsToSave.push({
             objectID: entryId,
+            contentType: contentType,
             ...strapiObject,
           });
         }
@@ -88,15 +89,18 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       objectsIdsToDelete,
       algoliaClient,
       indexName,
-      transformToBooleanFields
+      transformToBooleanFields,
+      transformerCallback
     );
   },
   afterUpdateAndCreateAlreadyPopulate: async (
+    contentType: string,
     articles: any[],
     idPrefix: string,
     algoliaClient: ReturnType<typeof algoliasearch>,
     indexName: string,
-    transformToBooleanFields: string[] = []
+    transformToBooleanFields: string[] = [],
+    transformerCallback: (string, any) => any | null
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
@@ -114,6 +118,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         } else {
           objectsToSave.push({
             objectID: entryIdWithPrefix,
+            contentType: contentType,
             ...article,
           });
         }
@@ -131,7 +136,8 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       objectsIdsToDelete,
       algoliaClient,
       indexName,
-      transformToBooleanFields
+      transformToBooleanFields,
+      transformerCallback
     );
   },
   afterDeleteOneOrMany: async (
