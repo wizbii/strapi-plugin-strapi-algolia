@@ -14,7 +14,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     algoliaClient: ReturnType<typeof algoliasearchType>,
     indexName: string,
     transformToBooleanFields: string[] = [],
-    transformerCallback: (string, any) => any | null
+    transformerCallback: ((string, any) => any | null) | null
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const utilsService = strapiAlgolia.service('utils');
@@ -36,9 +36,12 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       const chunkedObjectsToSave: any[][] = utilsService.getChunksRequests(objectsToSave);
       for (const chunk of chunkedObjectsToSave) {
 
-        const cleanedChunk = chunk.map((c) =>
+        let cleanedChunk = chunk.map((c) =>
           transformNullToBoolean(c, transformToBooleanFields)
         );
+        if (transformerCallback) {
+          cleanedChunk = cleanedChunk.map((c) => transformerCallback(c.contentType, c));
+        }
         await algoliaClient.saveObjects({
           indexName,
           objects: cleanedChunk,

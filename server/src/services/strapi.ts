@@ -42,7 +42,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     populate: any,
     hideFields: string[],
     transformToBooleanFields: string[],
-    transformerCallback: (string, any) => any | null,
+    transformerCallback: ((string, any) => any | null) | null,
     idPrefix: string,
     algoliaClient: ReturnType<typeof algoliasearch>,
     indexName: string,
@@ -100,7 +100,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     algoliaClient: ReturnType<typeof algoliasearch>,
     indexName: string,
     transformToBooleanFields: string[] = [],
-    transformerCallback: (string, any) => any | null
+    transformerCallback?: ((string, any) => any | null) | null
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
