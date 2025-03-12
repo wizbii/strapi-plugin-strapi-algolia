@@ -94,17 +94,17 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
           )
       )
     );
-    const articles = (articlesStrapi ?? []).map((article: any) =>
-      utilsService.filterProperties(article, hideFields)
-    );
+ 
+
 
     await strapiService.afterUpdateAndCreateAlreadyPopulate(
       body.name,
-      articles,
+      articlesStrapi,
       idPrefix,
       client,
       indexName,
       transformToBooleanFields,
+      hideFields,
       transformerCallback
     );
 

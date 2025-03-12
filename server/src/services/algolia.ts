@@ -13,8 +13,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     objectsIdsToDelete: string[],
     algoliaClient: ReturnType<typeof algoliasearchType>,
     indexName: string,
-    transformToBooleanFields: string[] = [],
-    transformerCallback: ((string, any) => any | null) | null
+    transformToBooleanFields: string[] = []
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const utilsService = strapiAlgolia.service('utils');
@@ -39,9 +38,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         let cleanedChunk = chunk.map((c) =>
           transformNullToBoolean(c, transformToBooleanFields)
         );
-        if (transformerCallback) {
-          cleanedChunk = cleanedChunk.map((c) => transformerCallback(c.contentType, c));
-        }
+        cleanedChunk.forEach((x) => delete x._strapiContentType)
         await algoliaClient.saveObjects({
           indexName,
           objects: cleanedChunk,

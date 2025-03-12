@@ -71,8 +71,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         } else {
           objectsToSave.push({
             objectID: entryId,
-            contentType: contentType,
-            ...strapiObject,
+            ...transformerCallback ? transformerCallback(contentType, strapiObject): strapiObject,
           });
         }
       } catch (error) {
@@ -89,8 +88,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       objectsIdsToDelete,
       algoliaClient,
       indexName,
-      transformToBooleanFields,
-      transformerCallback
+      transformToBooleanFields
     );
   },
   afterUpdateAndCreateAlreadyPopulate: async (
@@ -100,13 +98,18 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     algoliaClient: ReturnType<typeof algoliasearch>,
     indexName: string,
     transformToBooleanFields: string[] = [],
+    hideFields: string[] = [],
     transformerCallback?: ((string, any) => any | null) | null
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
+    const utilsService = strapiAlgolia.service('utils');
 
     const objectsToSave: any[] = [];
     const objectsIdsToDelete: string[] = [];
+
+
+    // 
 
     for (const article of articles) {
       try {
@@ -116,11 +119,10 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         if (article.publishedAt === null) {
           objectsIdsToDelete.push(entryIdWithPrefix);
         } else {
-          objectsToSave.push({
+          objectsToSave.push(utilsService.filterProperties({
             objectID: entryIdWithPrefix,
-            contentType: contentType,
-            ...article,
-          });
+            ...transformerCallback ? transformerCallback(contentType, article): article,
+          }, hideFields));
         }
       } catch (error) {
         console.error(
@@ -136,8 +138,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       objectsIdsToDelete,
       algoliaClient,
       indexName,
-      transformToBooleanFields,
-      transformerCallback
+      transformToBooleanFields
     );
   },
   afterDeleteOneOrMany: async (
