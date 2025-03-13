@@ -8,7 +8,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       contentTypes,
       applicationId,
       apiKey,
-      transformerCallback
+      transformerCallback,
     } = strapi.config.get(
       'plugin::strapi-algolia'
     ) as StrapiAlgoliaConfig;
@@ -33,7 +33,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         idPrefix = '',
         populate = '*',
         hideFields = [],
-        transformToBooleanFields = []
+        transformToBooleanFields = [],
       } = contentType;
 
       if (strapi.contentTypes[name]) {

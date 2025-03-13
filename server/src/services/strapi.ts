@@ -59,7 +59,9 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
 
     for (const event of events) {
       try {
-        const entryId = `${idPrefix}${utilsService.getEntryId(event)}`;
+        const entryId = `${idPrefix}${utilsService.getEntryId(
+          event
+        )}`;
         const strapiObject = await strapiService.getStrapiObject(
           event,
           populate,
@@ -71,7 +73,9 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         } else {
           objectsToSave.push({
             objectID: entryId,
-            ...transformerCallback ? transformerCallback(contentType, strapiObject): strapiObject,
+            ...(transformerCallback
+              ? transformerCallback(contentType, strapiObject)
+              : strapiObject),
           });
         }
       } catch (error) {
@@ -108,8 +112,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     const objectsToSave: any[] = [];
     const objectsIdsToDelete: string[] = [];
 
-
-    // 
+    //
 
     for (const article of articles) {
       try {
@@ -119,10 +122,17 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         if (article.publishedAt === null) {
           objectsIdsToDelete.push(entryIdWithPrefix);
         } else {
-          objectsToSave.push(utilsService.filterProperties({
-            objectID: entryIdWithPrefix,
-            ...transformerCallback ? transformerCallback(contentType, article): article,
-          }, hideFields));
+          objectsToSave.push(
+            utilsService.filterProperties(
+              {
+                objectID: entryIdWithPrefix,
+                ...(transformerCallback
+                  ? transformerCallback(contentType, article)
+                  : article),
+              },
+              hideFields
+            )
+          );
         }
       } catch (error) {
         console.error(
