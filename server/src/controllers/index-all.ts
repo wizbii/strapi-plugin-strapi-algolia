@@ -26,7 +26,6 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
     const strapiService = strapiAlgolia.service('strapi');
-    const utilsService = strapiAlgolia.service('utils');
 
     const client = await algoliaService.getAlgoliaClient(
       applicationId,

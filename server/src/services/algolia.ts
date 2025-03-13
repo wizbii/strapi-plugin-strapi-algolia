@@ -35,7 +35,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       const chunkedObjectsToSave: any[][] = utilsService.getChunksRequests(objectsToSave);
       for (const chunk of chunkedObjectsToSave) {
 
-        let cleanedChunk = chunk.map((c) =>
+        const cleanedChunk = chunk.map((c) =>
           transformNullToBoolean(c, transformToBooleanFields)
         );
         cleanedChunk.forEach((x) => delete x._strapiContentType)
