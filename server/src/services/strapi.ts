@@ -65,18 +65,23 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         const strapiObject = await strapiService.getStrapiObject(
           event,
           populate,
-          hideFields
+          []
         );
 
-        if (strapiObject.publishedAt === null) {
+        if (event.action === 'afterUpdate') {
           objectsIdsToDelete.push(entryId);
         } else {
-          objectsToSave.push({
-            objectID: entryId,
-            ...(transformerCallback
-              ? transformerCallback(contentType, strapiObject)
-              : strapiObject),
-          });
+          objectsToSave.push(
+            utilsService.filterProperties(
+              {
+                objectID: entryId,
+                ...(transformerCallback
+                  ? transformerCallback(contentType, strapiObject)
+                  : strapiObject),
+              },
+              hideFields
+            )
+          );
         }
       } catch (error) {
         console.error(
