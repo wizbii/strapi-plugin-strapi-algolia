@@ -146,3 +146,11 @@ curl --request POST \
 	"name": "api::article.article"
 }'
 ```
+
+## Contributors
+
+<a href="https://github.com/wizbii/strapi-plugin-strapi-algolia/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=wizbii/strapi-plugin-strapi-algolia" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
