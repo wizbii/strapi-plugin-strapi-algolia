@@ -1,5 +1,12 @@
 
 
+## [2.0.2](https://github.com/wizbii/strapi-algolia/compare/v2.0.1...v2.0.2) (2025-03-14)
+
+
+### Bug Fixes
+
+ - issue where changes create duplicates
+
 ## [2.0.1](https://github.com/wizbii/strapi-algolia/compare/v2.0.0...v2.0.1) (2024-10-28)
 
 
