@@ -42,9 +42,11 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     populate: any,
     hideFields: string[],
     transformToBooleanFields: string[],
+    transformerCallback: ((string, any) => any | null) | null,
     idPrefix: string,
     algoliaClient: ReturnType<typeof algoliasearch>,
-    indexName: string
+    indexName: string,
+    contentType: string
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
@@ -63,16 +65,23 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         const strapiObject = await strapiService.getStrapiObject(
           event,
           populate,
-          hideFields
+          []
         );
 
-        if (strapiObject.publishedAt === null) {
+        if (event.action === 'afterUpdate') {
           objectsIdsToDelete.push(entryId);
         } else {
-          objectsToSave.push({
-            objectID: entryId,
-            ...strapiObject,
-          });
+          objectsToSave.push(
+            utilsService.filterProperties(
+              {
+                objectID: entryId,
+                ...(transformerCallback
+                  ? transformerCallback(contentType, strapiObject)
+                  : strapiObject),
+              },
+              hideFields
+            )
+          );
         }
       } catch (error) {
         console.error(
@@ -92,17 +101,23 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     );
   },
   afterUpdateAndCreateAlreadyPopulate: async (
+    contentType: string,
     articles: any[],
     idPrefix: string,
     algoliaClient: ReturnType<typeof algoliasearch>,
     indexName: string,
-    transformToBooleanFields: string[] = []
+    transformToBooleanFields: string[] = [],
+    hideFields: string[] = [],
+    transformerCallback?: ((string, any) => any | null) | null
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
+    const utilsService = strapiAlgolia.service('utils');
 
     const objectsToSave: any[] = [];
     const objectsIdsToDelete: string[] = [];
+
+    //
 
     for (const article of articles) {
       try {
@@ -112,10 +127,17 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         if (article.publishedAt === null) {
           objectsIdsToDelete.push(entryIdWithPrefix);
         } else {
-          objectsToSave.push({
-            objectID: entryIdWithPrefix,
-            ...article,
-          });
+          objectsToSave.push(
+            utilsService.filterProperties(
+              {
+                objectID: entryIdWithPrefix,
+                ...(transformerCallback
+                  ? transformerCallback(contentType, article)
+                  : article),
+              },
+              hideFields
+            )
+          );
         }
       } catch (error) {
         console.error(

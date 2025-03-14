@@ -34,11 +34,11 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     if (objectsToSave.length) {
       const chunkedObjectsToSave: any[][] =
         utilsService.getChunksRequests(objectsToSave);
-
       for (const chunk of chunkedObjectsToSave) {
         const cleanedChunk = chunk.map((c) =>
           transformNullToBoolean(c, transformToBooleanFields)
         );
+        cleanedChunk.forEach((x) => delete x._strapiContentType);
         await algoliaClient.saveObjects({
           indexName,
           objects: cleanedChunk,

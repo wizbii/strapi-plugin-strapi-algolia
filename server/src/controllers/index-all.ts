@@ -16,6 +16,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       contentTypes,
       applicationId,
       apiKey,
+      transformerCallback,
     } = strapi.config.get(
       'plugin::strapi-algolia'
     ) as StrapiAlgoliaConfig;
@@ -27,7 +28,6 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
     const strapiService = strapiAlgolia.service('strapi');
-    const utilsService = strapiAlgolia.service('utils');
 
     const client = await algoliaService.getAlgoliaClient(
       applicationId,
@@ -95,16 +95,16 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
           )
       )
     );
-    const articles = (articlesStrapi ?? []).map((article: any) =>
-      utilsService.filterProperties(article, hideFields)
-    );
 
     await strapiService.afterUpdateAndCreateAlreadyPopulate(
-      articles,
+      body.name,
+      articlesStrapi,
       idPrefix,
       client,
       indexName,
-      transformToBooleanFields
+      transformToBooleanFields,
+      hideFields,
+      transformerCallback
     );
 
     return ctx.send({

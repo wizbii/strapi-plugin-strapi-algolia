@@ -8,6 +8,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       contentTypes,
       applicationId,
       apiKey,
+      transformerCallback,
     } = strapi.config.get(
       'plugin::strapi-algolia'
     ) as StrapiAlgoliaConfig;
@@ -46,9 +47,11 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
               populate,
               hideFields,
               transformToBooleanFields,
+              transformerCallback,
               idPrefix,
               client,
-              indexName
+              indexName,
+              contentType.name
             );
           },
           afterUpdate: async (event) => {
@@ -57,9 +60,11 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
               populate,
               hideFields,
               transformToBooleanFields,
+              transformerCallback,
               idPrefix,
               client,
-              indexName
+              indexName,
+              contentType.name
             );
           },
           afterDelete: async (event) => {
