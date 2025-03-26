@@ -1,5 +1,16 @@
 
 
+## [2.0.3](https://github.com/wizbii/strapi-algolia/compare/v2.0.2...v2.0.3) (2025-03-26)
+
+
+### Bug Fixes
+
+ - update condition for deleting objects based on publishedAt status
+
+### Docs
+
+ - add contributors section to README
+
 ## [2.0.2](https://github.com/wizbii/strapi-algolia/compare/v2.0.1...v2.0.2) (2025-03-14)
 
 
