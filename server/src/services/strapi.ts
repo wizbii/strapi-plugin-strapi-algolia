@@ -68,7 +68,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
           []
         );
 
-        if (event.action === 'afterUpdate') {
+        if (strapiObject.publishedAt === null) {
           objectsIdsToDelete.push(entryId);
         } else {
           objectsToSave.push(
@@ -116,8 +116,6 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
 
     const objectsToSave: any[] = [];
     const objectsIdsToDelete: string[] = [];
-
-    //
 
     for (const article of articles) {
       try {
