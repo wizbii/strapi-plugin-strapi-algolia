@@ -46,7 +46,12 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     populate: any,
     hideFields: string[],
     transformToBooleanFields: string[],
-    transformerCallback: ((string, any) => any | null) | null,
+    transformerCallback:
+      | ((
+          contentType: string,
+          record: any
+        ) => any | null | Promise<any | null>)
+      | null,
     idPrefix: string,
     algoliaClient: ReturnType<typeof algoliasearch>,
     indexName: string,
@@ -87,7 +92,10 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
               {
                 objectID: entryId,
                 ...(transformerCallback
-                  ? transformerCallback(contentType, strapiObject)
+                  ? await transformerCallback(
+                      contentType,
+                      strapiObject
+                    )
                   : strapiObject),
               },
               hideFields
@@ -119,7 +127,12 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     indexName: string,
     transformToBooleanFields: string[] = [],
     hideFields: string[] = [],
-    transformerCallback?: ((string, any) => any | null) | null
+    transformerCallback?:
+      | ((
+          contentType: string,
+          record: any
+        ) => any | null | Promise<any | null>)
+      | null
   ) => {
     const strapiAlgolia = strapi.plugin('strapi-algolia');
     const algoliaService = strapiAlgolia.service('algolia');
@@ -141,7 +154,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
               {
                 objectID: entryIdWithPrefix,
                 ...(transformerCallback
-                  ? transformerCallback(contentType, article)
+                  ? await transformerCallback(contentType, article)
                   : article),
               },
               hideFields

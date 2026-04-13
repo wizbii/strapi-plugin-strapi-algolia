@@ -39,5 +39,6 @@
   "liveshare.allowGuestTaskControl": true,
   "liveshare.languages.allowGuestCommandControl": true,
   "liveshare.openSharedServers": false,
-  "liveshare.publishWorkspaceInfo": true
+  "liveshare.publishWorkspaceInfo": true,
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
 }
