@@ -10,5 +10,8 @@ export type StrapiAlgoliaConfig = {
     hideFields?: string[];
     transformToBooleanFields?: string[];
   }[];
-  transformerCallback?: (string, any) => any | null;
+  transformerCallback?: (
+    contentType: string,
+    record: any
+  ) => any | null | Promise<any | null>;
 };
