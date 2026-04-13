@@ -19,9 +19,10 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     if (!entryId) {
       throw new Error(`No entry id found in event.`);
     }
-
+    const { documentId, locale } = event.result;
     const strapiObject = await strapi.documents(modelUid).findOne({
-      documentId: event.result.documentId,
+      documentId,
+      locale: typeof locale === "string" && locale.length > 0 ? locale : undefined,
       // the documentId can have a published & unpublished version associated
       // without a status filter, the unpublished version could be returned even if a published on exists,
       // which would incorrectly de-index.
@@ -59,6 +60,10 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
 
     for (const event of events) {
       try {
+        if (! event.result?.publishedAt) {
+          // event trigger by draft updates
+          continue;
+        }
         const entryId = `${idPrefix}${utilsService.getEntryId(
           event
         )}`;
@@ -69,8 +74,11 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         );
 
         if (strapiObject.publishedAt === null) {
+          // Unreachable code! 
+          // `getStrapiObject` returns only the published entry or throws an error
           objectsIdsToDelete.push(entryId);
-        } else {
+        } else if (event.result?.id === strapiObject.id) {
+          // Ensure that the current event is triggered by strapiObject
           objectsToSave.push(
             utilsService.filterProperties(
               {
