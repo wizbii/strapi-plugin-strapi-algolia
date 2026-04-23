@@ -1,5 +1,7 @@
 # Changelog
 
+## [2.2.0](https://github.com/wizbii/strapi-plugin-strapi-algolia/compare/v2.0.5...v2.2.0) (2026-04-23)
+
 ## [2.0.5](https://github.com/wizbii/strapi-plugin-strapi-algolia/compare/v2.0.4...v2.0.5) (2026-04-23)
 
 ### Features
