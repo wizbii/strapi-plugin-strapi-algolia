@@ -1,4 +1,13 @@
+# Changelog
 
+## [2.0.5](https://github.com/wizbii/strapi-plugin-strapi-algolia/compare/v2.0.4...v2.0.5) (2026-04-23)
+
+### Features
+
+- [strapi-expert] - add advanced patterns documentation and skill integration
+### Bug Fixes
+
+ - duplication on draft updates (Issue [#28](https://github.com/wizbii/strapi-plugin-strapi-algolia/issues/28)) - missing locale in findOne query
 
 ## [2.0.4](https://github.com/wizbii/strapi-algolia/compare/v2.0.3...v2.0.4) (2025-04-04)
 
