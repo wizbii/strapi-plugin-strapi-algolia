@@ -22,8 +22,9 @@ export const validateConfig = (config: unknown) => {
       })
       .validateSync(config);
   } catch (error) {
+    // eslint-disable-next-line preserve-caught-error
     throw new Error(
-      `Algolia plugin configuration error: ${error.errors}`
+      `Algolia plugin configuration error: ${(error as any).errors}`
     );
   }
 };

@@ -2,7 +2,6 @@ import { Core, UID } from '@strapi/strapi';
 import { algoliasearch } from 'algoliasearch';
 import { HookEvent } from '../../../utils/event';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default ({ strapi }: { strapi: Core.Strapi }) => ({
   getStrapiObject: async (
     event: HookEvent,
